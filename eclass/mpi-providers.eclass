@@ -17,11 +17,6 @@ esac
 # Every MPI Implementation
 IMPLEMENTATION_LIST="mpich mpich2 openmpi lam-mpi openlib-mvapich2 hpl"
 
-# @FUNCTION: mpi-providers_get_slot
-# @DESCRIPTION:
-# Returns slot based on software version. Likely to be removed.
-mpi-providers_get_slot() {
-    echo "${PVR}"
-}
+SLOT="${PVR}"
 
 export EPREFIX="${EPREFIX}/usr/lib/mpi/${PF}"
