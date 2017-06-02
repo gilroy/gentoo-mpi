@@ -23,5 +23,5 @@ mpi-providers_safe_mv() {
         mkdir "$DEST" || die
     fi
 
-    mv "$1/*" "$DEST" || die
+    mv "$1/*" "$DEST/$PN-$PVR/." || die
 }
