@@ -16,7 +16,7 @@ SLOT="${PVR}"
 # @ECLASS-FUNCTION: mpi-providers_safe_mv
 # @USAGE: $mpi-providers_save_mv < installation directory (usually EPREFIX)>
 mpi-providers_safe_mv() {
-    DEST="$1/usr/lib/mpi"
+    DEST="$1/etc/"
     if [[ ! -d "$DEST" ]]; then
         mkdir "$DEST" || die
     fi
