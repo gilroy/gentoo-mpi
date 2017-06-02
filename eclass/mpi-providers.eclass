@@ -13,8 +13,6 @@ esac
 
 SLOT="${PVR}"
 
-export EPREFIX="${EPREFIX}/usr/lib/mpi/${PF}"
-
 # @ECLASS-FUNCTION: mpi-providers_safe_mv
 # @USAGE: $mpi-providers_save_mv < installation directory (usually EPREFIX)>
 mpi-providers_safe_mv() {
