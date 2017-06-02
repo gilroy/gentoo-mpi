@@ -11,12 +11,17 @@ case ${EAPI:-0} in
   *) die "gentoo-mpi.eclass does not support EAPI ${EAPI}"
 esac
 
-# @ECLASS-VARIABLE: IMPLEMENTATION_LIST
-# @INTERNAL
-# @DESCRIPTION:
-# Every MPI Implementation
-IMPLEMENTATION_LIST="mpich mpich2 openmpi lam-mpi openlib-mvapich2 hpl"
-
 SLOT="${PVR}"
 
 export EPREFIX="${EPREFIX}/usr/lib/mpi/${PF}"
+
+# @ECLASS-FUNCTION: mpi-providers_safe_mv
+# @USAGE: $mpi-providers_save_mv < installation directory (usually EPREFIX)>
+mpi-providers_safe_mv() {
+    DEST="$1/usr/lib/mpi"
+    if [[ ! -d "$DEST" ]]; then
+        mkdir "$DEST" || die
+    fi
+
+    mv "$1/*" "$DEST" || die
+}
