@@ -18,8 +18,8 @@ SLOT="${PVR}"
 mpi-providers_safe_mv() {
     DEST="$1/etc/"
     if [[ ! -d "$DEST" ]]; then
-        mkdir "$DEST" || die
+        mkdir -p "$DEST" || die
     fi
 
-    mv "$1/*" "$DEST/$PN-$PVR/." || die
+    mv "$S/*" "$DEST/$PN-$PVR/." || die "could not mv $S to $DEST/$PN-$PVR/."
 }
