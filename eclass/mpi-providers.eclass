@@ -8,6 +8,7 @@
 
 case ${EAPI:-0} in
   6) ;;
+  5) ;;
   *) die "gentoo-mpi.eclass does not support EAPI ${EAPI}"
 esac
 
@@ -16,10 +17,8 @@ SLOT="${PVR}"
 # @ECLASS-FUNCTION: mpi-providers_safe_mv
 # @USAGE: $mpi-providers_save_mv < installation directory (usually EPREFIX)>
 mpi-providers_safe_mv() {
-    DEST="$1/etc/"
-    if [[ ! -d "$DEST" ]]; then
-        mkdir -p "$DEST" || die
-    fi
+    DEST="$1/usr/lib/mpi/${PN}-${PVR}"
+    mkdir -p "$DEST" || die
 
-    mv "$S/*" "$DEST/$PN-$PVR/." || die "could not mv $S to $DEST/$PN-$PVR/."
+    mv "$S" "$DEST/." || die "could not mv $S to $DEST/$PN-$PVR/."
 }
