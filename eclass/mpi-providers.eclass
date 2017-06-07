@@ -14,11 +14,29 @@ esac
 
 SLOT="${PVR}"
 
-# @ECLASS-FUNCTION: mpi-providers_safe_mv
-# @USAGE: $mpi-providers_save_mv < installation directory (usually EPREFIX)>
-mpi-providers_safe_mv() {
-    DEST="$1/usr/lib/mpi/${PN}-${PVR}"
-    mkdir -p "$DEST" || die
+alias econf='econf --sysconfdir="${EPREFIX}"/etc/"${PN}"-"${PVR}"'
 
-    mv "$S" "$DEST/." || die "could not mv $S to $DEST/$PN-$PVR/."
+# @ECLASS-FUNCTION: mpi-providers_safe_mv
+# @DESCRIPTION: 
+# $mpi-providers_save_mv < installation directory (usually EPREFIX)>
+mpi-providers_safe_mv() {
+
+	# MOVE EVERYTHING BUT DOCS TO /usr/lib/${PN}-${PVR}
+	# move docs to tmp folder
+    mkdir -p /tmp/"${PVR}"/DOCS
+	rsync --remove-source-files -a "${ED}"usr/share/doc/* \
+		/tmp/"${PVR}"/DOCS/. || die
+	rsync --remove-source-files -a "${ED}"* \
+		/tmp/"${PVR}"/. || die
+
+	# move docs from tmp, move everything else to /usr/lib/mpi/${PN}-${PVR}
+	mkdir -p "${ED}"usr/lib/mpi/"${PN}"-"${PVR}"
+	mkdir -p "${ED}"usr/share/doc || die
+	rsync --remove-source-files -a /tmp/"${PVR}"/DOCS/* \
+		"${ED}"/usr/share/doc/. || die
+	rsync --remove-source-files -a /tmp/"${PVR}"/* \
+		"${ED}"usr/lib/mpi/"${PN}"-"${PVR}"/. || die
+
+	# clean up
+	rm -rf /tmp/"${PVR}"
 }
