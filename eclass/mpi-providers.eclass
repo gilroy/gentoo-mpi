@@ -1,7 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: gentoo-mpi.eclass
+# @ECLASS: mpi-providers.eclass
 # @MAINTAINER: 
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Functions for providing varied mpi builds.
@@ -9,7 +9,7 @@
 case ${EAPI:-0} in
   6) ;;
   5) ;;
-  *) die "gentoo-mpi.eclass does not support EAPI ${EAPI}"
+  *) die "mpi-providers.eclass does not support EAPI ${EAPI}"
 esac
 
 SLOT="${PVR}"
