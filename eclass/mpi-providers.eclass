@@ -14,29 +14,53 @@ esac
 
 SLOT="${PVR}"
 
-alias econf='econf --sysconfdir="${EPREFIX}"/etc/"${PN}"-"${PVR}"'
-
 # @ECLASS-FUNCTION: mpi-providers_safe_mv
 # @DESCRIPTION: 
 # $mpi-providers_save_mv < installation directory (usually EPREFIX)>
 mpi-providers_safe_mv() {
 
-	# MOVE EVERYTHING BUT DOCS TO /usr/lib/${PN}-${PVR}
-	# move docs to tmp folder
-    mkdir -p /tmp/"${PVR}"/DOCS
-	rsync --remove-source-files -a "${ED}"usr/share/doc/* \
-		/tmp/"${PVR}"/DOCS/. || die
-	rsync --remove-source-files -a "${ED}"* \
-		/tmp/"${PVR}"/. || die
+	## MOVE EVERYTHING BUT DOCS TO /usr/lib/mpi/${PN}-${PVR}
+	## MOVE REMAINING CONTENTS FROM /etc/* TO /etc/${PN}-${PVR}
 
-	# move docs from tmp, move everything else to /usr/lib/mpi/${PN}-${PVR}
-	mkdir -p "${ED}"usr/lib/mpi/"${PN}"-"${PVR}"
-	mkdir -p "${ED}"usr/share/doc || die
-	rsync --remove-source-files -a /tmp/"${PVR}"/DOCS/* \
-		"${ED}"/usr/share/doc/. || die
-	rsync --remove-source-files -a /tmp/"${PVR}"/* \
-		"${ED}"usr/lib/mpi/"${PN}"-"${PVR}"/. || die
+	local TMP="${T}"/"${PN}"
+
+	# move anything remaining in /etc to /etc/${PN}-${PVR}
+	mkdir -p "${TMP}"/etc
+	mkdir -p "${ED}"/etc/"${PN}"-"${PVR}"
+	rsync --remove-source-files -a "${ED}"/etc/* \
+		"${TMP}"/etc/. || die "rsync failed"
+	rsync --remove-source-files -a "${TMP}"/etc/* \
+		"${ED}"/etc/"${PN}"-"${PVR}" || die "rsync failed"
+
+	# move /usr/share/doc to temporary docs directory
+	mkdir -p "${T}"/"${PN}"/DOCS
+	local DOCS="${ED}"/usr/share/doc
+	rsync --remove-source-files -a "${DOCS}"/* \
+		"${TMP}"/DOCS/. || die "rsync failed"
+	rsync --remove-source-files -a "${ED}"/* \
+		"${TMP}"/. || die "rsync failed"
+	
+	# move docs from tmp, everything else to /usr/lib/mpi/${PN}-${PVR}
+<<<<<<< HEAD
+	mkdir -p "${ED}"/usr/$(get_libdir)/mpi/"${PN}"-"${PVR}"
+	local MPI_DIR="${ED}"/usr/$(get_libdir)/mpi/"${PN}"-"${PVR}"
+=======
+	mkdir -p "${ED}"/usr/lib/mpi/"${PN}"-"${PVR}"
+	local MPI_DIR="${ED}"/usr/lib/mpi/"${PN}"-"${PVR}"
+>>>>>>> c58e80665d1f318db2ee47fbd70f37caa12d5704
+	mkdir -p "${DOCS}"
+	rsync --remove-source-files -a "${TMP}"/DOCS/* \
+		"${DOCS}"/. || die "rsync failed"
+	rsync --remove-source-files -a "${TMP}"/* \
+		"${MPI_DIR}"/. || die "rsync failed"
 
 	# clean up
-	rm -rf /tmp/"${PVR}"
+	rm -rf "${TMP}"
+}
+
+# @ECLASS-FUNCTION: mpi-providers_sysconfdir
+# @DESCRIPTION:
+# Sets --syconfdir econf flag to a directory in /etc unique to that particular MPI build
+mpi-providers_sysconfdir() {
+    echo "${EPREFIX}"/etc/"${PN}"-"${PVR}"
 }
