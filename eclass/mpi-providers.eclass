@@ -41,13 +41,8 @@ mpi-providers_safe_mv() {
 		"${TMP}"/. || die "rsync failed"
 	
 	# move docs from tmp, everything else to /usr/lib/mpi/${PN}-${PVR}
-<<<<<<< HEAD
 	mkdir -p "${ED}"/usr/$(get_libdir)/mpi/"${PN}"-"${PVR}"
 	local MPI_DIR="${ED}"/usr/$(get_libdir)/mpi/"${PN}"-"${PVR}"
-=======
-	mkdir -p "${ED}"/usr/lib/mpi/"${PN}"-"${PVR}"
-	local MPI_DIR="${ED}"/usr/lib/mpi/"${PN}"-"${PVR}"
->>>>>>> c58e80665d1f318db2ee47fbd70f37caa12d5704
 	mkdir -p "${DOCS}"
 	rsync --remove-source-files -a "${TMP}"/DOCS/* \
 		"${DOCS}"/. || die "rsync failed"
