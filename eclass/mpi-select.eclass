@@ -12,4 +12,22 @@ case ${EAPI:-0} in
   *) die "mpi-select.eclass does not support EAPI ${EAPI}"
 esac
 
+# @ECLASS-VARIABLE: IMPLEMENTATION_LIST
+# @INTERNAL
+# @DESCRIPTION:
+# List of used MPI implementation
+IMPLEMENTATION_LIST="mpich mpich2 openmpi openib-mvapich2"
 
+# @ECLASS-FUNCTION: mpi-select_implementation_install
+# @DESCRIPTION:
+# Install MPI software with arbitrary implementations
+mpi-select_implementation_install (){
+    for implementation in "$@"
+    do
+        if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
+            # go through src_[phase]
+        else
+            die "invalid implementation"
+        fi
+    done
+}
