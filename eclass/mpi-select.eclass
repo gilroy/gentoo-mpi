@@ -18,6 +18,12 @@ esac
 # List of used MPI implementation
 IMPLEMENTATION_LIST="mpich mpich2 openmpi openib-mvapich2"
 
+# @ECLASS-VARIABLE: INSTALLED_IMPLEMENTATIONS
+# @INTERNAL
+# @DESCRIPTION:
+# To be populated by mpi-select_detect_installs
+INSTALLED_IMPLEMENTATIONS=""
+
 # @ECLASS-FUNCTION: mpi-select_implementation_install
 # @DESCRIPTION:
 # Install MPI software with arbitrary implementations
@@ -30,4 +36,10 @@ mpi-select_implementation_install (){
             die "invalid implementation"
         fi
     done
+}
+# @ECLASS-FUNCTION: mpi-select_detect_installs
+# @DESCRIPTION:
+# See what MPI software is installed on the system
+mpi-select_detect_installs (){
+    # iterate through /usr/lib/mpi to populate INSTALLED_IMPLEMENTATIONS
 }
