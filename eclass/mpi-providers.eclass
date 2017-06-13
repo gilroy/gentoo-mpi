@@ -16,7 +16,7 @@ SLOT="${PVR}"
 
 # @ECLASS-FUNCTION: mpi-providers_safe_mv
 # @DESCRIPTION: 
-# $mpi-providers_save_mv < installation directory (usually EPREFIX)>
+# Safely moves installation directory to /usr/lib/mpi/$PN-PVR. Documentation is stored in the usual location.
 mpi-providers_safe_mv() {
 
 	## MOVE EVERYTHING BUT DOCS TO /usr/lib/mpi/${PN}-${PVR}
@@ -24,11 +24,13 @@ mpi-providers_safe_mv() {
 
 	local mpi_root="${ED}/usr/$(get_libdir)/mpi/${PN}-${PVR}"
 	
-	mv "${ED}" "${T}/install"
+	# move to temp directory
+	mv "${ED}" "${T}/install" || die "mv failed"
 	mkdir -p "${mpi_root}"
-	mv "${T}/install" "${mpi_root}"
+	# move from temp to final destination
+	mv "${T}/install" "${mpi_root}" || die "mv failed"
 
-	mv "${mpi_root}/usr/share/doc" "${ED}"
+	mv "${mpi_root}/usr/share/doc" "${ED}" || die "mv failed"
 
 	cd "${mpi_root}/etc"
 	find -O3 -mindepth 1 -maxdepth 1 ! -path "./${PF}*" -execdir cp -a -t "${PF}" '{}' \+
@@ -39,5 +41,5 @@ mpi-providers_safe_mv() {
 # @DESCRIPTION:
 # Sets --syconfdir econf flag to a directory in /etc unique to that particular MPI build
 mpi-providers_sysconfdir() {
-    echo "${EPREFIX}"/etc/"${PN}"-"${PVR}"
+    echo "${EPREFIX}/etc/${PN}-${PVR}"
 }
