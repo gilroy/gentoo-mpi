@@ -16,46 +16,30 @@ SLOT="${PVR}"
 
 # @ECLASS-FUNCTION: mpi-providers_safe_mv
 # @DESCRIPTION: 
-# $mpi-providers_save_mv < installation directory (usually EPREFIX)>
+# Safely moves installation directory to /usr/lib/mpi/$PN-PVR. Documentation is stored in the usual location.
 mpi-providers_safe_mv() {
 
 	## MOVE EVERYTHING BUT DOCS TO /usr/lib/mpi/${PN}-${PVR}
 	## MOVE REMAINING CONTENTS FROM /etc/* TO /etc/${PN}-${PVR}
 
-	local TMP="${T}"/"${PN}"
-
-	# move anything remaining in /etc to /etc/${PN}-${PVR}
-	mkdir -p "${TMP}"/etc
-	mkdir -p "${ED}"/etc/"${PN}"-"${PVR}"
-	rsync --remove-source-files -a "${ED}"/etc/* \
-		"${TMP}"/etc/. || die "rsync failed"
-	rsync --remove-source-files -a "${TMP}"/etc/* \
-		"${ED}"/etc/"${PN}"-"${PVR}" || die "rsync failed"
-
-	# move /usr/share/doc to temporary docs directory
-	mkdir -p "${T}"/"${PN}"/DOCS
-	local DOCS="${ED}"/usr/share/doc
-	rsync --remove-source-files -a "${DOCS}"/* \
-		"${TMP}"/DOCS/. || die "rsync failed"
-	rsync --remove-source-files -a "${ED}"/* \
-		"${TMP}"/. || die "rsync failed"
+	local mpi_root="${ED}/usr/$(get_libdir)/mpi/${PN}-${PVR}"
 	
-	# move docs from tmp, everything else to /usr/lib/mpi/${PN}-${PVR}
-	mkdir -p "${ED}"/usr/$(get_libdir)/mpi/"${PN}"-"${PVR}"
-	local MPI_DIR="${ED}"/usr/$(get_libdir)/mpi/"${PN}"-"${PVR}"
-	mkdir -p "${DOCS}"
-	rsync --remove-source-files -a "${TMP}"/DOCS/* \
-		"${DOCS}"/. || die "rsync failed"
-	rsync --remove-source-files -a "${TMP}"/* \
-		"${MPI_DIR}"/. || die "rsync failed"
+	# move to temp directory
+	mv "${ED}" "${T}/install" || die "mv failed"
+	mkdir -p "${mpi_root}"
+	# move from temp to final destination
+	mv "${T}/install" "${mpi_root}" || die "mv failed"
 
-	# clean up
-	rm -rf "${TMP}"
+	mv "${mpi_root}/usr/share/doc" "${ED}" || die "mv failed"
+
+	cd "${mpi_root}/etc"
+	find -O3 -mindepth 1 -maxdepth 1 ! -path "./${PF}*" -execdir cp -a -t "${PF}" '{}' \+
+
 }
 
 # @ECLASS-FUNCTION: mpi-providers_sysconfdir
 # @DESCRIPTION:
 # Sets --syconfdir econf flag to a directory in /etc unique to that particular MPI build
 mpi-providers_sysconfdir() {
-    echo "${EPREFIX}"/etc/"${PN}"-"${PVR}"
+    echo "${EPREFIX}/etc/${PN}-${PVR}"
 }
