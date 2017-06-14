@@ -25,12 +25,14 @@ mpi-providers_safe_mv() {
 	local mpi_root="${ED}/usr/$(get_libdir)/mpi/${PN}-${PVR}"
 	
 	# move to temp directory
+	mv "${ED}/usr/share/doc" "${T}/DOCS" || die "mv failed"
 	mv "${ED}" "${T}/install" || die "mv failed"
 	mkdir -p "${mpi_root}"
 	# move from temp to final destination
 	mv "${T}/install" "${mpi_root}" || die "mv failed"
 
-	mv "${mpi_root}/usr/share/doc" "${ED}" || die "mv failed"
+	mkdir -p "${ED}/usr/share/doc"
+	mv "${T}/DOCS" "${ED}/usr/share/doc" ||die "mv failed"
 
 	cd "${mpi_root}/etc"
 	find -O3 -mindepth 1 -maxdepth 1 ! -path "./${PF}*" -execdir cp -a -t "${PF}" '{}' \+
