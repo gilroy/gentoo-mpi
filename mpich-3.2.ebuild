@@ -5,7 +5,7 @@ EAPI=5
 
 FORTRAN_NEEDED=fortran
 
-inherit mpi-providers fortran-2
+inherit fortran-2 mpi-providers
 
 MY_PV=${PV/_/}
 DESCRIPTION="A high performance and portable MPI implementation"
@@ -82,10 +82,11 @@ src_configure() {
 	unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS FCFLAGS LDFLAGS
 
 	econf ${c} \
+		--sysconfdir="$(mpi-providers_sysconfdir)" \
 		--with-pm=hydra \
 		--disable-fast \
 		--enable-versioning \
-		${hydra_c}  
+		${hydra_c}
 		$(use_enable romio) \
 		$(use_enable cxx) \
 		$(use_enable fortran f77) \
@@ -109,5 +110,5 @@ src_install() {
 	if ! use doc; then
 		rm -rf "${D}"usr/share/doc/${PF}/www*
 	fi
-	mpi-providers_safe_mv || die "failed to mv"
+	mpi-providers_safe_mv
 }
