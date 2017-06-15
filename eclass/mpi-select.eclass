@@ -20,6 +20,12 @@ esac
 # List of used MPI implementation
 IMPLEMENTATION_LIST="mpich mpich2 openmpi openib-mvapich2"
 
+# @ECLASS-VARIABLE: INSTALLED_IMPLEMENTATIONS
+# @INTERNAL
+# @DESCRIPTION:
+# List of used MPI implementation
+INSTALLED_IMPLEMENTATIONS=mpi-select_detect_installs
+
 # @ECLASS-VARIABLE: MPI_DIR
 # @INTERNAL
 # @DESCRIPTION:
@@ -30,11 +36,12 @@ MPI_DIR="/usr/$(get_libdir)/mpi"
 # @DESCRIPTION:
 # Install MPI software with arbitrary implementations
 mpi-select_implementation_install (){
-    local installed=mpi-select_detect_installs
     for implementation in "$@"
     do
         if [[ "${installed}" == *"${implementation}"* ]]; then
-            # go through src_[phase]
+            mpi-select_src_configure "${implementation}"
+            mpi-select_src_compile "${implementation}"
+            mpi-select_src_install "${implementation}"
         else
             die "invalid implementation"
         fi
@@ -53,17 +60,25 @@ mpi-select_detect_installs (){
 }
 
 mpi-select_src_configure (){
-    default
+    case "${1}" in
+        # cases based on implementation
+    esac
 }
 
 mpi-select_src_compile (){
-    default
+    case "${1}" in
+        # cases based on implementation
+    esac
 }
 
 mpi-select_src_test (){
-    default
+    case "${1}" in
+        # cases based on implementation
+    esac
 }
 
 mpi-select_src_install (){
-    default
+    case "${1}" in
+        # cases based on implementation
+    esac
 }
