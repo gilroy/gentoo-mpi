@@ -14,7 +14,7 @@ SRC_URI="http://www.mpich.org/static/downloads/${PV}/${P}.tar.gz"
 
 LICENSE="mpich"
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+cxx doc fortran mpi-threads romio threads"
+IUSE="+cxx doc fortran threads romio"
 
 COMMON_DEPEND="
 	dev-libs/libaio
