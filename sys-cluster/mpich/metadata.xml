@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<maintainer type="person">
-<email>michael.gilroy24@gmail.com</email>
-</maintainer>
+	<maintainer type="person">
+		<email>michael.gilroy24@gmail.com</email>
+	</maintainer>
 	<longdescription lang="en">
 	MPICH 3.2
 	</longdescription>
+
+	<use>
+		<flag name="romio"></flag>
+	</use>
 </pkgmetadata>
