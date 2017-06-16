@@ -50,7 +50,8 @@ mpi-select_implementation_install (){
 # @ECLASS-FUNCTION: mpi-select_detect_installs
 # @DESCRIPTION:
 # See what MPI software is installed on the system
-mpi-select_detect_installs (){
+mpi-select_detect_installs()
+{
     for dir in "${MPI_DIR}"/*
     do
         INSTALLED_IMPLEMENTATIONS="${INSTALLED_IMPLEMENTATIONS} ${dir}"
@@ -59,25 +60,28 @@ mpi-select_detect_installs (){
     echo "${INSTALLED_IMPLEMENTATIONS}"
 }
 
-mpi-select_src_configure (){
+mpi-select_src_configure()
+{
     case "${1}" in
         # cases based on implementation
     esac
 }
 
-mpi-select_src_compile (){
+mpi-select_src_compile ()
+{
     case "${1}" in
         # cases based on implementation
     esac
 }
 
-mpi-select_src_test (){
+mpi-select_src_test()
+{
     case "${1}" in
         # cases based on implementation
     esac
 }
 
-mpi-select_src_install (){
+mpi-select_src_install(){
     case "${1}" in
         # cases based on implementation
     esac
