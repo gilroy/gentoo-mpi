@@ -32,7 +32,7 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v$(get_version_component_range 1-
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux"
-IUSE="cma cuda cxx elibc_FreeBSD fortran heterogeneous ipv6 java mpi-threads numa romio threads
+IUSE="cxx elibc_FreeBSD fortran ipv6 java threads numa cuda
 	${IUSE_OPENMPI_FABRICS} ${IUSE_OPENMPI_RM} ${IUSE_OPENMPI_OFED_FEATURES}"
 
 REQUIRED_USE="openmpi_rm_slurm? ( !openmpi_rm_pbs )
