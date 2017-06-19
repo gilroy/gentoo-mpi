@@ -10,5 +10,6 @@
 
 	<use>
 		<flag name="romio"></flag>
+		<flag name="mpi-threads"></flag>
 	</use>
 </pkgmetadata>
