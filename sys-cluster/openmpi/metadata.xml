@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>michael.gilroy24@gmail.com</email>
+	</maintainer>
+	<longdescription lang="en">
+	openmpi implementations
+	</longdescription>
+	<use>
+		<flag name="romio"></flag>
+		<flag name="mpi-threads"></flag>
+		<flag name="pbs"></flag>
+		<flag name="heterogeneous"></flag>
+		<flag name="vt"></flag>
+	</use>
+</pkgmetadata>
