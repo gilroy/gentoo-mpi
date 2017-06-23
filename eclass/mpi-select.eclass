@@ -24,7 +24,7 @@ IMPLEMENTATION_LIST="mpich mpich2 openmpi openib-mvapich2"
 # @INTERNAL
 # @DESCRIPTION:
 # List of used MPI implementation
-INSTALLED_IMPLEMENTATIONS=mpi-select_detect_installs
+INSTALLED_IMPLEMENTATIONS=get_all_implementations
 
 # @ECLASS-VARIABLE: MPI_DIR
 # @INTERNAL
@@ -35,7 +35,9 @@ MPI_DIR="/usr/$(get_libdir)/mpi"
 # @ECLASS-FUNCTION: mpi-select_implementation_install
 # @DESCRIPTION:
 # Install MPI software with arbitrary implementations
-mpi-select_implementation_install (){
+mpi-select_implementation_install()
+{
+	# IGNORE THIS FOR NOW
     for implementation in "$@"
     do
         if [[ "${installed}" == *"${implementation}"* ]]; then
@@ -50,7 +52,7 @@ mpi-select_implementation_install (){
 # @ECLASS-FUNCTION: mpi-select_detect_installs
 # @DESCRIPTION:
 # See what MPI software is installed on the system
-mpi-select_detect_installs()
+get_all_implemenetations()
 {
     for dir in "${MPI_DIR}"/*
     do
@@ -60,29 +62,99 @@ mpi-select_detect_installs()
     echo "${INSTALLED_IMPLEMENTATIONS}"
 }
 
-mpi-select_src_configure()
+mpi_foreach_implementation()
 {
-    case "${1}" in
-        # cases based on implementation
-    esac
+	debug-print-function ${FUNCNAME} "${@}"	
+
+	# [[ -z "${INSTALLED_IMPLEMENTATIONS}" ]] \
+	#			die "No mpi implementations detected"
+
+	local status=0
+
+	for implementation in "${@}"
+	do
+		# iterate through implementations, repeat same commands for each variant
+		if [[  ]]
+		fi
+
+	
+	done
+
+	echo "${status}"
 }
 
-mpi-select_src_compile ()
+# TODO: write src_configure/compile/test/
+mpi-select_src_configure()
 {
-    case "${1}" in
-        # cases based on implementation
-    esac
+	debug-print-function "${FUNCNAME}" "${@}"
+
+	mpi-select_abi_src_configure()
+	{
+		debug-print-function "${FUNCNAME}" "${@}"
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f mpi_src_configure > /dev/null; then
+			mpi_src_configure
+		else
+			default_src_configure	
+		fi
+		popd > /dev/null || die
+	}
+
+	mpi_foreach_implementation mpi-select_abi_src_configure
+}
+
+mpi-select_src_compile()
+{
+	debug-print-function "${FUNCNAME}" "${@}"
+
+	mpi-select_abi_src_compile()
+	{
+		debug-print-function "${FUNCNAME}" "${@}"
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f mpi_src_configure > /dev/null; then
+			mpi_src_compile
+		else
+			default_src_configure	
+		fi
+		popd > /dev/null || die
+	}
+
+	mpi_foreach_implementation mpi-select_abi_src_compile
 }
 
 mpi-select_src_test()
 {
-    case "${1}" in
-        # cases based on implementation
-    esac
+	debug-print-function "${FUNCNAME}" "${@}"
+
+	mpi-select_abi_src_test()
+	{
+		debug-print-function "${FUNCNAME}" "${@}"
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f mpi_src_configure > /dev/null; then
+			mpi_src_test
+		else
+			default_src_configure	
+		fi
+		popd > /dev/null || die
+	}
+
+	mpi_foreach_implementation mpi-select_abi_src_test
 }
 
-mpi-select_src_install(){
-    case "${1}" in
-        # cases based on implementation
-    esac
+mpi-select_src_install()
+{
+	debug-print-function "${FUNCNAME}" "${@}"
+
+	mpi-select_abi_src_install()
+	{
+		debug-print-function "${FUNCNAME}" "${@}"
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f mpi_src_configure > /dev/null; then
+			mpi_src_install_
+		else
+			default_src_configure	
+		fi
+		popd > /dev/null || die
+	}
+	mpi_foreach_implementation mpi-select_abi_src_install
 }
