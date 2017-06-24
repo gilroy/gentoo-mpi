@@ -34,10 +34,11 @@ mpi-providers_safe_mv() {
 	mkdir -p "${ED}/usr/share/doc"
 	mv "${T}/DOCS" "${ED}/usr/share/doc" ||die "mv failed"
 
-    mkdir -p "${ED}/etc/${PF}"
-	cd "${ED}/etc"
-
-	find -O3 -mindepth 1 -maxdepth 1 ! -path "./${PF}*" | xargs cp -t "${PF}/." || die "failed to cp to ${ED}/etc//"
+	local i
+	for i in ${D}/etc/*; do
+    	[ "${i}" == "${D}/etc/${PN}-${PVR}" ] && continue
+    	mv ${i} ${D}/etc/${PN}-${PVR} || die
+	done
 }
 
 # @ECLASS-FUNCTION: mpi-providers_sysconfdir
