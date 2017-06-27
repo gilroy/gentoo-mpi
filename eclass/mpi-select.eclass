@@ -62,6 +62,9 @@ get_all_implemenetations()
     echo "${INSTALLED_IMPLEMENTATIONS}"
 }
 
+# @ECLASS-FUNCTION: mpi_foreach_implementation
+# @DESCRIPTION:
+# Iterates through each given implementation and repeats commands for each implementation
 mpi_foreach_implementation()
 {
 	debug-print-function ${FUNCNAME} "${@}"	
@@ -74,7 +77,23 @@ mpi_foreach_implementation()
 	for implementation in "${@}"
 	do
 		# iterate through implementations, repeat same commands for each variant
-		if [[  ]]
+		if [[ "${IMPLEMENTATION_LIST}" ~= *"${implementation}"* ]]
+			local BUILD_DIR="${WORKDIR}/build"
+			
+			# modeling after multibuild for testing & learning
+			_mpi_run()
+			{
+				local i=1
+				while [[ ${!1} == _* ]];do
+					i+=1
+				done
+
+				[[ ${i} -le ${#} ]]
+				einfo ${@}
+				echo ${@}
+			}
+		else
+			die "invalid implementation!"
 		fi
 
 	
