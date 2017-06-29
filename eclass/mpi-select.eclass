@@ -32,23 +32,6 @@ INSTALLED_IMPLEMENTATIONS=get_all_implementations
 # Location in which mpi software should be installed
 MPI_DIR="/usr/$(get_libdir)/mpi"
 
-# @ECLASS-FUNCTION: mpi-select_implementation_install
-# @DESCRIPTION:
-# Install MPI software with arbitrary implementations
-mpi-select_implementation_install()
-{
-	# IGNORE THIS FOR NOW
-    for implementation in "$@"
-    do
-        if [[ "${installed}" == *"${implementation}"* ]]; then
-            mpi-select_src_configure "${implementation}"
-            mpi-select_src_compile "${implementation}"
-            mpi-select_src_install "${implementation}"
-        else
-            die "invalid implementation"
-        fi
-    done
-}
 # @ECLASS-FUNCTION: mpi-select_detect_installs
 # @DESCRIPTION:
 # See what MPI software is installed on the system
@@ -79,6 +62,7 @@ mpi_foreach_implementation()
 		# iterate through implementations, repeat same commands for each variant
 		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
 			local BUILD_DIR="${WORKDIR}/build"
+			einfo ${BUILD_DIR}
 			
 			# modeling after multibuild for testing & learning
 			_mpi_run()
@@ -92,6 +76,8 @@ mpi_foreach_implementation()
 				einfo ${@}
 				echo ${@}
 			}
+
+			_mpi_run "${@}"
 		else
 			die "invalid implementation!"
 		fi
