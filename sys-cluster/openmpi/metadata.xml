@@ -13,5 +13,8 @@
 		<flag name="pbs"></flag>
 		<flag name="heterogeneous"></flag>
 		<flag name="vt"></flag>
+		<flag name="cma"></flag>
+		<flag name="cuda"></flag>
+		<flag name="numa"></flag>
 	</use>
 </pkgmetadata>

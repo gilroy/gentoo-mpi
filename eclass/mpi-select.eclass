@@ -77,7 +77,7 @@ mpi_foreach_implementation()
 	for implementation in "${@}"
 	do
 		# iterate through implementations, repeat same commands for each variant
-		if [[ "${IMPLEMENTATION_LIST}" ~= *"${implementation}"* ]]
+		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
 			local BUILD_DIR="${WORKDIR}/build"
 			
 			# modeling after multibuild for testing & learning
