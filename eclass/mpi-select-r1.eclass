@@ -88,78 +88,64 @@ mpi_foreach_implementation()
 	echo "${status}"
 }
 
-# TODO: write src_configure/compile/test/
+mpi-select_get_implementation()
+{
+	echo "${PN}"
+}
+
+mpi-select_bindir()
+{
+	echo "${D}/usr/bin/${PF}/"
+}
+
+mpi-select_libdir()
+{
+	echo "${D}/usr/$(get_libdir)/${PF}/"
+}
+
+mpi-select_etcdir()
+{
+	echo "${D}/etc/${PF}/"
+}
+
 mpi_src_configure()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
-
-	mpi-select_abi_src_configure()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_configure
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-
-	mpi_foreach_implementation mpi-select_abi_src_configure
+	# hmmm how to handle econf flags....
+	default
 }
 
 mpi_src_compile()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
+	local imp=$(mpi-select_get_implementation)
 
-	mpi-select_abi_src_compile()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_compile
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-
-	mpi_foreach_implementation mpi-select_abi_src_compile
+	if [[ "${imp}" == "mpich" ]]; then
+		einfo "hit mpich"
+	elif [[ "${imp}" == "openmpi" ]]; then
+		einfo "hit openmpi"
+	fi
 }
 
 mpi_src_test()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
-
-	mpi-select_abi_src_test()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_test
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-
-	mpi_foreach_implementation mpi-select_abi_src_test
+	default
 }
 
 mpi_src_install()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
+	emake DESTDIR="${D}" install
 
-	mpi-select_abi_src_install()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_install_
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-	mpi_foreach_implementation mpi-select_abi_src_install
+	dodir $(mpi-select_bindir)
+	mv "${D}"/usr/bin/* $(mpi-select_bindir)
+
+	dodir $(mpi-select_libdir)
+	mv "${D}"/usr/$(get_libdir)/* $(mpi-select_libdir)
+
+	dodir $(mpi-select_etcdir)
+	local i
+	for i in "${D}/etc/"*; do
+		[ "${i}" == $(mpi-select_etcdir) ] && continue
+		mv "${i}" $(mpi-select_etcdir)
+	done
+
+	find . -type d -empty -delete || die "could not delete empty directories"
 }
