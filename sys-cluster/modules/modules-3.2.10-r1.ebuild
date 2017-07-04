@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit autotools multilib
+inherit multilib
 
 DESCRIPTION="Dynamic modification of a user's environment via modulefiles"
 HOMEPAGE="http://modules.sourceforge.net/"
@@ -35,7 +35,7 @@ PATCHES=(
 src_prepare() {
 	has_version ">=dev-lang/tcl-8.6.0" && \
 		epatch "${FILESDIR}"/${P}-errorline.patch
-	
+
 	sed -e "s:@EPREFIX@:${EPREFIX}:g" \
 		"${FILESDIR}"/modules.sh.in > modules.sh
 
