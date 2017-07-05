@@ -6,6 +6,8 @@
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Allow mpi software to select mpi implementation of choice.
 
+inherit multilib
+
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
 case ${EAPI:-0} in
@@ -56,6 +58,8 @@ mpi_foreach_implementation()
 	#			die "No mpi implementations detected"
 
 	local status=0
+
+	export BUILD_DIR="${PF}-${ABI}"
 
 	for implementation in "${@}"
 	do
