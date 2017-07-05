@@ -59,8 +59,6 @@ mpi_foreach_implementation()
 
 	local status=0
 
-	export BUILD_DIR="${PF}-${ABI}"
-
 	for implementation in "${@}"
 	do
 		# iterate through implementations, repeat same commands for each variant
@@ -90,6 +88,15 @@ mpi_foreach_implementation()
 	done
 
 	echo "${status}"
+}
+
+mpi_wrapper()
+{
+	export BUILD_DIR="${PF}-${ABI}"
+	
+	impl="$(grep -R MPI_TARGETS* /etc/portage/make.conf* | cut -d '\"' -f2)"
+
+	echo ${impl}
 }
 
 mpi-select_get_implementation()

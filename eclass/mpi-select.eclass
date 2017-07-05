@@ -6,6 +6,8 @@
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Allow mpi software to select mpi implementation of choice.
 
+inherit multilib
+
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
 case ${EAPI:-0} in
@@ -88,6 +90,14 @@ mpi_foreach_implementation()
 	echo "${status}"
 }
 
+mpi_wrapper()
+{
+	export BUILD_DIR="${PF}-${ABI}"
+
+	impl="$(grep -R MPI_TARGETS* /etc/portage/make.conf* | cut -d '\"' -f2)"
+	echo ${impl}
+}
+
 # TODO: write src_configure/compile/test/
 mpi-select_src_configure()
 {
@@ -105,7 +115,7 @@ mpi-select_src_configure()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_abi_src_configure
+	mpi_foreach_implementation mpi_wrapper mpi-select_abi_src_configure
 }
 
 mpi-select_src_compile()
@@ -124,7 +134,7 @@ mpi-select_src_compile()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_abi_src_compile
+	mpi_foreach_implementation mpi_wrapper mpi-select_abi_src_compile
 }
 
 mpi-select_src_test()
@@ -143,7 +153,7 @@ mpi-select_src_test()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_abi_src_test
+	mpi_foreach_implementation mpi_wrapper mpi-select_abi_src_test
 }
 
 mpi-select_src_install()
@@ -161,5 +171,5 @@ mpi-select_src_install()
 		fi
 		popd > /dev/null || die
 	}
-	mpi_foreach_implementation mpi-select_abi_src_install
+	mpi_foreach_implementation mpi-wrapper mpi-select_abi_src_install
 }
