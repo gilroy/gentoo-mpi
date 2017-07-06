@@ -34,6 +34,12 @@ INSTALLED_IMPLEMENTATIONS=get_all_implementations
 # Location in which mpi software should be installed
 MPI_DIR="/usr/$(get_libdir)/mpi"
 
+# @ECLASS-VARIABLE: MPI_TARGETS
+# @INTERNAL
+# @DESCRIPTION:
+# List of implementations in make.conf.
+MPI_TARGETS="${MPI_TARGETS}"
+
 # @ECLASS-FUNCTION: mpi-select_detect_installs
 # @DESCRIPTION:
 # See what MPI software is installed on the system
@@ -94,7 +100,6 @@ mpi_wrapper()
 {
 	export BUILD_DIR="${PF}-${ABI}"
 
-	impl="$(grep -R MPI_TARGETS* /etc/portage/make.conf* | cut -d '\"' -f2)"
 	echo ${impl}
 }
 
