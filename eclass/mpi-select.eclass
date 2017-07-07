@@ -6,7 +6,7 @@
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Allow mpi software to select mpi implementation of choice.
 
-inherit multilib
+inherit multilib flag-o-matic
 
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
@@ -107,6 +107,8 @@ mpi_wrapper()
 mpi-select_src_configure()
 {
 	debug-print-function "${FUNCNAME}" "${@}"
+
+	append-cflags -std=gnu89
 
 	mpi-select_abi_src_configure()
 	{

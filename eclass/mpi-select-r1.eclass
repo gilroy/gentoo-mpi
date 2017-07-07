@@ -6,7 +6,7 @@
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Allow mpi software to select mpi implementation of choice.
 
-inherit multilib
+inherit multilib flag-o-matic
 
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
@@ -125,6 +125,8 @@ mpi-select_etcdir()
 
 mpi_src_configure()
 {
+	append-cflags -std=gnu89
+
 	if [[ "${imp}" == "mpich" ]]; then
 		local c=
 		if use mpi-threads; then
