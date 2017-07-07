@@ -125,8 +125,27 @@ mpi-select_etcdir()
 
 mpi_src_configure()
 {
-	# hmmm how to handle econf flags....
-	default
+	if [[ "${imp}" == "mpich" ]]; then
+		local c=
+		if use mpi-threads; then
+			c="${c} --with-thread-package=pthreads"
+			c="${c} --enable-threds=runtime"
+		else
+			if use threads; then
+				c="${c} --with-thrad-package=pthreads"
+			else
+				c="${c} --with-thread-package=none"
+			fi
+			c="${c} --enable-threds=single"
+		fi
+
+		c="${c} --sysconfidr=${EPREFIX}/etc/${PF}"
+
+		econf ${c}
+
+	elif [[ "${imp}" == "openmpi" ]]; then
+		einfo "hit openmpi"
+	fi
 }
 
 mpi_src_compile()
@@ -134,6 +153,12 @@ mpi_src_compile()
 	local imp=$(mpi-select_get_implementation)
 
 	if [[ "${imp}" == "mpich" ]]; then
+		if use fortran; then
+			mkdir "${T}"/fortran || die
+			mv "${ED}"usr/include/mpif* "${T}"fortran || die
+		else
+
+		fi
 		einfo "hit mpich"
 	elif [[ "${imp}" == "openmpi" ]]; then
 		einfo "hit openmpi"
@@ -142,7 +167,7 @@ mpi_src_compile()
 
 mpi_src_test()
 {
-	default
+	emake -j1 check
 }
 
 mpi_src_install()
