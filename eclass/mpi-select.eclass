@@ -53,6 +53,19 @@ get_all_implemenetations()
     echo "${INSTALLED_IMPLEMENTATIONS}"
 }
 
+mpi_dependencies()
+{
+	ret=""
+
+	# TODO: verify each ${impl} in MPI_TARGETS exists
+	for impl in ${MPI_TARGETS}
+	do
+		ret="${ret} ${impl}"
+	done
+
+	echo "${ret}"
+}
+
 # @ECLASS-FUNCTION: mpi_foreach_implementation
 # @DESCRIPTION:
 # Iterates through each given implementation and repeats commands for each implementation
