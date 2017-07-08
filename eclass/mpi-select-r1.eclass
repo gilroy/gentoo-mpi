@@ -96,6 +96,9 @@ mpi_foreach_implementation()
 	echo "${status}"
 }
 
+# @ECLASS-FUNCTION: mpi_wrapper
+# @DESCRIPTION:
+# Helper function for setting up environment
 mpi_wrapper()
 {
 	export BUILD_DIR="${PF}-${ABI}"
@@ -103,25 +106,41 @@ mpi_wrapper()
 	echo ${impl}
 }
 
+# @ECLASS-FUNCTION: mpi-select_get_implementation
+# @DESCRIPTION:
+# Helper function for getting the current implementation in use
 mpi-select_get_implementation()
 {
 	echo "${PN}"
 }
 
+# @ECLASS-FUNCTION: mpi-select_bindir
+# @DESCRIPTION:
+# Helper function for getting the directory for binaries to be installed to
 mpi-select_bindir()
 {
 	echo "${D}/usr/bin/${PF}/"
 }
 
+# @ECLASS-FUNCTION: mpi-select_libdir
+# @DESCRIPTION:
+# Helper function for getting the directory for libraries to be installed to
 mpi-select_libdir()
 {
 	echo "${D}/usr/$(get_libdir)/${PF}/"
 }
 
+# @ECLASS-FUNCTION: mpi-select_etcdir
+# @DESCRIPTION:
+# Helper function for getting the directory for /etc* to be installed to
 mpi-select_etcdir()
 {
 	echo "${D}/etc/${PF}/"
 }
+
+###########################
+# MPI SRC PHASE FUNCTIONS #
+###########################
 
 mpi_src_configure()
 {
