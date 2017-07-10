@@ -53,19 +53,6 @@ get_all_implemenetations()
     echo "${INSTALLED_IMPLEMENTATIONS}"
 }
 
-mpi_dependencies()
-{
-	ret=""
-
-	# TODO: verify each ${impl} in MPI_TARGETS exists
-	for impl in ${MPI_TARGETS}
-	do
-		ret="${ret} ${impl}"
-	done
-
-	echo "${ret}"
-}
-
 # @ECLASS-FUNCTION: mpi_foreach_implementation
 # @DESCRIPTION:
 # Iterates through each given implementation and repeats commands for each implementation
@@ -109,87 +96,95 @@ mpi_foreach_implementation()
 	echo "${status}"
 }
 
+# @ECLASS-FUNCTION: mpi_wrapper
+# @DESCRIPTION:
+# Helper function for setting up environment
 mpi_wrapper()
 {
 	export BUILD_DIR="${PF}-${ABI}"
-
+	
 	echo ${impl}
 }
 
-# TODO: write src_configure/compile/test/
-mpi-select_src_configure()
+# @ECLASS-FUNCTION: mpi-select_get_implementation
+# @DESCRIPTION:
+# Helper function for getting the current implementation in use
+mpi-select_get_implementation()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
+	echo "${PN}"
+}
 
+# @ECLASS-FUNCTION: mpi-select_bindir
+# @DESCRIPTION:
+# Helper function for getting the directory for binaries to be installed to
+mpi-select_bindir()
+{
+	echo "${D}/usr/bin/${PF}/"
+}
+
+# @ECLASS-FUNCTION: mpi-select_libdir
+# @DESCRIPTION:
+# Helper function for getting the directory for libraries to be installed to
+mpi-select_libdir()
+{
+	echo "${D}/usr/$(get_libdir)/${PF}/"
+}
+
+# @ECLASS-FUNCTION: mpi-select_etcdir
+# @DESCRIPTION:
+# Helper function for getting the directory for /etc* to be installed to
+mpi-select_etcdir()
+{
+	echo "${D}/etc/${PF}/"
+}
+
+###########################
+# MPI SRC PHASE FUNCTIONS #
+###########################
+
+mpi_src_configure()
+{
 	append-cflags -std=gnu89
 
-	mpi-select_abi_src_configure()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_configure
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-
-	mpi_foreach_implementation mpi_wrapper mpi-select_abi_src_configure
+	if [[ "${imp}" == "mpich" ]]; then
+		einfo "hit mpich"
+	elif [[ "${imp}" == "openmpi" ]]; then
+		einfo "hit openmpi"
+	fi
 }
 
-mpi-select_src_compile()
+mpi_src_compile()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
+	local imp=$(mpi-select_get_implementation)
 
-	mpi-select_abi_src_compile()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_compile
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-
-	mpi_foreach_implementation mpi_wrapper mpi-select_abi_src_compile
+	if [[ "${imp}" == "mpich" ]]; then
+		einfo "hit mpich"
+	elif [[ "${imp}" == "openmpi" ]]; then
+		einfo "hit openmpi"
+	fi
 }
 
-mpi-select_src_test()
+mpi_src_test()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
-
-	mpi-select_abi_src_test()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_test
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-
-	mpi_foreach_implementation mpi_wrapper mpi-select_abi_src_test
+	emake -j1 check
 }
 
-mpi-select_src_install()
+mpi_src_install()
 {
-	debug-print-function "${FUNCNAME}" "${@}"
+	emake DESTDIR="${D}" install
 
-	mpi-select_abi_src_install()
-	{
-		debug-print-function "${FUNCNAME}" "${@}"
-		pushd "${BUILD_DIR}" > /dev/null || die
-		if declare -f mpi_src_configure > /dev/null; then
-			mpi_src_install_
-		else
-			default_src_configure	
-		fi
-		popd > /dev/null || die
-	}
-	mpi_foreach_implementation mpi-wrapper mpi-select_abi_src_install
+	dodir $(mpi-select_bindir)
+	mv "${D}"/usr/bin/* $(mpi-select_bindir)
+
+	dodir $(mpi-select_libdir)
+	mv "${D}"/usr/$(get_libdir)/* $(mpi-select_libdir)
+
+	dodir $(mpi-select_etcdir)
+	local i
+	for i in "${D}/etc/"*; do
+		[ "${i}" == $(mpi-select_etcdir) ] && continue
+		mv "${i}" $(mpi-select_etcdir) || die "failed to mv"
+	done
+
+	find . -type d -empty -delete || die "could not delete empty directories"
 }
