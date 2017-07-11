@@ -3,7 +3,7 @@
 
 EAPI=4
 
-inherit eutils multilib
+inherit eutils multilib mpi-select
 
 DESCRIPTION="A Portable Implementation of the High-Performance Linpack Benchmark for Distributed-Memory Computers"
 HOMEPAGE="http://www.netlib.org/benchmark/hpl/"
