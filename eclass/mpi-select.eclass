@@ -6,7 +6,7 @@
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Allow mpi software to select mpi implementation of choice.
 
-inherit multilib flag-o-matic
+inherit multilib multilib-minimal flag-o-matic
 
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install
 
@@ -104,6 +104,7 @@ mpi_wrapper()
 	export BUILD_DIR="${PF}-${ABI}"
 	
 	echo ${impl}
+
 }
 
 # @ECLASS-FUNCTION: mpi-select_get_implementation
@@ -151,6 +152,21 @@ mpi_src_configure()
 	elif [[ "${imp}" == "openmpi" ]]; then
 		einfo "hit openmpi"
 	fi
+
+	mpi_src_configure()
+	{
+		mkdir -p "${BUILD_DIR}" || die
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f multilib_src_configure > /dev/null ; then
+			mpi_src_configure
+		else
+			default_src_configure
+		fi
+
+		popd > /dev/null || die
+	}
+
+	multilib_foreach_variant mpi_src_configure
 }
 
 mpi_src_compile()
@@ -162,11 +178,41 @@ mpi_src_compile()
 	elif [[ "${imp}" == "openmpi" ]]; then
 		einfo "hit openmpi"
 	fi
+
+	mpi_src_compile()
+	{
+		mkdir -p "${BUILD_DIR}" || die
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f multilib_src_compile > /dev/null ; then
+			mpi_src_compile
+		else
+			default_src_compile
+		fi
+
+		popd > /dev/null || die
+	}
+
+	multilib_foreach_variant mpi_src_compile
 }
 
 mpi_src_test()
 {
 	emake -j1 check
+
+	mpi_src_test()
+	{
+		mkdir -p "${BUILD_DIR}" || die
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f multilib_src_test > /dev/null ; then
+			mpi_src_test
+		else
+			default_src_test
+		fi
+
+		popd > /dev/null || die
+	}
+
+	multilib_foreach_variant mpi_src_test
 }
 
 mpi_src_install()
