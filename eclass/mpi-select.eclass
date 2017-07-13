@@ -153,7 +153,7 @@ mpi_src_configure()
 		einfo "hit openmpi"
 	fi
 
-	mpi_src_configure()
+	mpi-select_src_configure()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -166,7 +166,7 @@ mpi_src_configure()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi_src_configure
+	multilib_foreach_variant mpi-select_src_configure
 }
 
 mpi_src_compile()
@@ -179,7 +179,7 @@ mpi_src_compile()
 		einfo "hit openmpi"
 	fi
 
-	mpi_src_compile()
+	mpi-select_src_compile()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -192,14 +192,14 @@ mpi_src_compile()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi_src_compile
+	multilib_foreach_variant mpi-select_src_compile
 }
 
 mpi_src_test()
 {
 	emake -j1 check
 
-	mpi_src_test()
+	mpi-select_src_test()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -212,7 +212,7 @@ mpi_src_test()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi_src_test
+	multilib_foreach_variant mpi-select_src_test
 }
 
 mpi_src_install()
@@ -233,4 +233,23 @@ mpi_src_install()
 	done
 
 	find . -type d -empty -delete || die "could not delete empty directories"
+
+	mpi-select_src_install()
+	{
+		mkdir -p "${BUILD_DIR}" || die
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f multilib_src_test > /dev/null ; then
+			emake DESTDIR="${D}" install
+		else
+			default_src_test
+		fi
+		
+		popd > /dev/null || die
+	}
+
+	multilib_foreach_variant mpi-select_src_install
+
+	
+	# TODO: proper conditional for einstalldocs
+	einstalldocs
 }
