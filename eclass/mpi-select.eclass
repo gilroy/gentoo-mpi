@@ -158,7 +158,7 @@ mpi_src_configure()
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
 		if declare -f multilib_src_configure > /dev/null ; then
-			mpi_src_configure
+			multilib_src_configure
 		else
 			default_src_configure
 		fi
@@ -184,7 +184,7 @@ mpi_src_compile()
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
 		if declare -f multilib_src_compile > /dev/null ; then
-			mpi_src_compile
+			multilib_src_compile
 		else
 			default_src_compile
 		fi
@@ -204,7 +204,7 @@ mpi_src_test()
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
 		if declare -f multilib_src_test > /dev/null ; then
-			mpi_src_test
+			multilib_src_test
 		else
 			default_src_test
 		fi
@@ -239,7 +239,7 @@ mpi_src_install()
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
 		if declare -f multilib_src_test > /dev/null ; then
-			emake DESTDIR="${D}" install
+			multilib_src_install
 		else
 			default_src_test
 		fi
