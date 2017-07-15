@@ -102,6 +102,9 @@ mpi_foreach_implementation()
 mpi_wrapper()
 {
 	export BUILD_DIR="${PF}-${ABI}"
+
+	# add lflags
+	export LFLAGS="/usr/lib/mpi/$(get_implementation)/usr/bin"
 	
 	echo ${impl}
 
