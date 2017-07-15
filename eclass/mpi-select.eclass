@@ -139,6 +139,13 @@ mpi-select_etcdir()
 	echo "${D}/etc/${PF}/"
 }
 
+validate_mpi_targets()
+{
+	for impl in $MPI_TARGETS; do
+		# compare against has_version
+	done
+}
+
 ###########################
 # MPI SRC PHASE FUNCTIONS #
 ###########################
