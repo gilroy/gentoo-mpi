@@ -13,7 +13,6 @@ DESCRIPTION="A high performance and portable MPI implementation"
 HOMEPAGE="http://www.mpich.org/"
 SRC_URI="http://www.mpich.org/static/downloads/${PV}/${P}.tar.gz"
 
-SLOT="0"
 LICENSE="mpich"
 KEYWORDS="~amd64-linux ~x86-linux"
 IUSE="+cxx doc fortran mpi-threads romio threads"
