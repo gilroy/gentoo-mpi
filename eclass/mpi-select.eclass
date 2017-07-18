@@ -145,6 +145,7 @@ mpi-select_etcdir()
 validate_mpi_targets()
 {
 	for impl in $MPI_TARGETS; do
+		einfo "hit targets function!"
 		# compare against has_version
 	done
 }
@@ -153,7 +154,7 @@ validate_mpi_targets()
 # MPI SRC PHASE FUNCTIONS #
 ###########################
 
-mpi_src_configure()
+mpi-select_src_configure()
 {
 	append-cflags -std=gnu89
 
@@ -179,7 +180,7 @@ mpi_src_configure()
 	multilib_foreach_variant mpi-select_src_configure
 }
 
-mpi_src_compile()
+mpi-select_src_compile()
 {
 	local imp=$(mpi-select_get_implementation)
 
@@ -205,7 +206,7 @@ mpi_src_compile()
 	multilib_foreach_variant mpi-select_src_compile
 }
 
-mpi_src_test()
+mpi-select_src_test()
 {
 	emake -j1 check
 
@@ -225,7 +226,7 @@ mpi_src_test()
 	multilib_foreach_variant mpi-select_src_test
 }
 
-mpi_src_install()
+mpi-select_src_install()
 {
 	emake DESTDIR="${D}" install
 
