@@ -195,6 +195,8 @@ mpi-select_src_configure()
 		einfo "hit openmpi"
 	fi
 
+	export LDFLAGS="/usr/lib/mpi/$(get_implementation)/usr/bin:LDFLAGS"
+
 	mpi-select_src_configure()
 	{
 		mkdir -p "${BUILD_DIR}" || die
