@@ -40,6 +40,37 @@ MPI_DIR="/usr/$(get_libdir)/mpi"
 # List of implementations in make.conf.
 MPI_TARGETS="${MPI_TARGETS}"
 
+# @FUNCTION : mpi_pkg_cc
+# @DESCRIPTION :
+# Get location of C compiler from /usr/
+mpi_pkg_cc()
+{
+	mpi_pkg_compiler "MPI_CC" "cc"
+}
+
+# @FUNCTION: mpi_pkg_compiler
+# @DESCRIPTION :
+# Return /usr/bin/mpi/$PN
+mpi_pkg_compiler
+{
+	local suffixes="${2}"
+	
+	for p in ${suffixes}; do
+		if [ -x ${ROOT}usr/bin/mpi${PN} ]; then
+			echo "${ROOT}usr/bin/mpi${PN}"
+			break
+		fi
+	done
+}
+
+# @FUNCTION: mpi_root
+# @DESCRIPTION:
+# Return installation root
+mpi_root()
+{
+	echo "/usr/$(get_libdir)/mpi/${PN}"	
+}
+
 # @ECLASS-FUNCTION: mpi-select_detect_installs
 # @DESCRIPTION:
 # See what MPI software is installed on the system
