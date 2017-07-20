@@ -134,9 +134,8 @@ mpi_wrapper()
 {
 	export BUILD_DIR="${PF}-${ABI}"
 
-	# add lflags
-	export LFLAGS="/usr/lib/mpi/$(get_implementation)/usr/bin"
-	
+	export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/mpich-3.2/install/usr/bin:${LD_LIBRARY_PATH}"
+
 	echo ${impl}
 
 }
@@ -162,7 +161,7 @@ mpi-select_bindir()
 # Helper function for getting the directory for libraries to be installed to
 mpi-select_libdir()
 {
-	echo "${D}/usr/$(get_libdir)/${PF}/"
+	echo "${D}/usr/$(get_libdir)/mpi/${PF}/"
 }
 
 # @ECLASS-FUNCTION: mpi-select_etcdir
@@ -189,13 +188,13 @@ mpi-select_src_configure()
 {
 	append-cflags -std=gnu89
 
+	mpi_wrapper
+
 	if [[ "${imp}" == "mpich" ]]; then
 		einfo "hit mpich"
 	elif [[ "${imp}" == "openmpi" ]]; then
 		einfo "hit openmpi"
 	fi
-
-	export LDFLAGS="/usr/lib/mpi/$(get_implementation)/usr/bin:LDFLAGS"
 
 	mpi-select_src_configure()
 	{

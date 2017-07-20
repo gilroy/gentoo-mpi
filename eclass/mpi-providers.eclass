@@ -36,7 +36,7 @@ mpi-providers_safe_mv() {
 
 	local i
 	for i in ${D}/etc/*; do
-    	[ "${i}" == "${D}/etc/${PN}-${PVR}" ] && continue
+    	[ "${i}" != "${D}/etc/${PN}-${PVR}" ] && continue
     	mv ${i} ${D}/etc/${PN}-${PVR} || die
 	done
 }
