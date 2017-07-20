@@ -40,24 +40,40 @@ MPI_DIR="/usr/$(get_libdir)/mpi"
 # List of implementations in make.conf.
 MPI_TARGETS="${MPI_TARGETS}"
 
+# @FUNCTION: mpi_dependencies
+# List of dependcies needed for mpi software
+mpi_dependencies()
+{
+	# similar to mpi_pkg_deplist
+	echo "hit"
+}
+
+# @FUNCTION: get_mpicc
+# @DESCRIPTION:
+# Fetches most recent version of mpicc installed
+get_mpicc()
+{
+	echo "$(ls -dv /usr/$(get_libdir)/mpi/mpich-* | tail -n 1)" || die "could not get mpicc"
+}
+
 # @FUNCTION : mpi_pkg_cc
 # @DESCRIPTION :
 # Get location of C compiler from /usr/
 mpi_pkg_cc()
 {
-	mpi_pkg_compiler "MPI_CC" "cc"
+	mpi_pkg_compiler "cc"
 }
 
 # @FUNCTION: mpi_pkg_compiler
 # @DESCRIPTION :
-# Return /usr/bin/mpi/$PN
+# Returns correct path for the compiler
 mpi_pkg_compiler
 {
-	local suffixes="${2}"
-	
-	for p in ${suffixes}; do
-		if [ -x ${ROOT}usr/bin/mpi${PN} ]; then
-			echo "${ROOT}usr/bin/mpi${PN}"
+	local args
+	for args in "${1}"; do
+		if [ -f "/usr/lib64/mpi/mpich-3.2/install/usr/bin" ]; then
+			die "hit!!"
+			echo "$(get_mpicc)/install/usr/bin/mpi${args}"
 			break
 		fi
 	done

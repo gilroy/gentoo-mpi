@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit eutils mpi multilib mpi-select
+inherit eutils multilib mpi-select
 
 DESCRIPTION="High-Performance Linpack Benchmark for Distributed-Memory Computers"
 HOMEPAGE="http://www.netlib.org/benchmark/hpl/"
@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
-	local mpicc_path="$(mpi_pkg_cc)"
+	local mpicc_path=$(mpi_pkg_cc)
 	local a=""
 	local locallib="${EPREFIX}/usr/$(get_libdir)/lib"
 
