@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
-	local mpicc_path=$(mpi_pkg_cc)
+	local mpicc_path="/usr/lib64/mpi/mpich-3.2/install/usr/bin/mpicc"
 	local a=""
 	local locallib="${EPREFIX}/usr/$(get_libdir)/lib"
 
