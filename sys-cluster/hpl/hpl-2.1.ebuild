@@ -15,7 +15,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="doc"
 
 RDEPEND="
-	$(mpi_pkg_deplist)
+	$(mpi_dependencies)
 	virtual/blas
 	virtual/lapack"
 DEPEND="${RDEPEND}

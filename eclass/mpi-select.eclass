@@ -44,8 +44,14 @@ MPI_TARGETS="${MPI_TARGETS}"
 # List of dependcies needed for mpi software
 mpi_dependencies()
 {
-	# similar to mpi_pkg_deplist
-	echo "hit"
+	ret=""
+	local impl
+
+	for impl in "${MPI_TARGETS}"; do
+		ret="${ret} sys-cluster/${impl}"	
+	done
+
+	echo "${ret}"
 }
 
 # @FUNCTION: get_mpicc
