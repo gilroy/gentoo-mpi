@@ -41,14 +41,13 @@ MPI_DIR="/usr/$(get_libdir)/mpi"
 MPI_TARGETS="${MPI_TARGETS}"
 
 # @FUNCTION: mpi_dependencies
-# List of dependcies needed for mpi software
+# Grabs $MPI_TARGETS to add to RDEPEND
 mpi_dependencies()
 {
-	ret=""
-	local impl
+	local impl ret
 
 	for impl in "${MPI_TARGETS}"; do
-		ret="${ret} sys-cluster/${impl}"	
+		ret="${ret} >=sys-cluster/${impl}"	
 	done
 
 	echo "${ret}"
