@@ -86,10 +86,117 @@ mpi_pkg_compiler
 	done
 }
 
+# @FUNCTION: _mpi_do
+# @DESCRIPTION:
+# mpi-sepecific build functions to be called from mpi pkg ebuilds
+_mpi_do()
+{
+	local rc prefix d
+	local cmd=${1}
+	local ran=1
+	local slash=/
+	local mdir="$(mpi_root)"
+
+	if ! mpi_classed; then
+		$*
+		return ${?}
+	fi
+
+	shift
+
+
+	if [ "${cmd#do}" != "${cmd}" ]; then
+		prefix="do"; cmd=${cmd#do}
+	elif [ "${cmd#new}" != "${cmd}" ]; then
+		prefix="new"; cmd=${cmd#new}
+	else
+		die "Unknown command passed to _mpi_do: ${cmd}"
+	fi
+
+	case ${cmd} in
+		bin|lib|lib.a|lib.so|sbin)
+			DESTTREE="${mdir}usr" ${prefix}${cmd} $*
+			rc=$?
+			;;
+		doc)
+			_E_DOCDESTTREE_="../../../../${mdir}usr/share/doc/${PF}/${_E_DOCDESTTREE_}" \
+				${prefix}${cmd} $*
+			rc=$?
+			for d in "/share/doc/${P}" "/share/doc" "/share"; do
+				rmdir ${D}/usr${d} &>/dev/null
+			done
+			;;
+		html)
+			_E_DOCDESTTREE_="../../../../${mdir}usr/share/doc/${PF}/www/${_E_DOCDESTTREE_}" \
+			${prefix}${cmd} $*
+			rc=$?
+			for d in "/share/doc/${P}/html" "/share/doc/${P}" "/share/doc" "/share"; do
+				rmdir ${D}/usr${d} &>/dev/null
+			done
+			;;
+		exe)
+			_E_EXEDESTTREE_="${mdir}${_E_EXEDESTTREE_}" ${prefix}${cmd} $*
+			rc=$?
+			;;
+		man|info)
+			"${D}"usr/share/${cmd} ] && mv "${D}"usr/share/${cmd}{,-orig}
+			[ ! -d "${D}"${mdir}usr/share/${cmd} ] \
+				&& install -d "${D}"${mdir}usr/share/${cmd}
+			[ ! -d "${D}"usr/share ] \
+				&& install -d "${D}"usr/share
+
+			ln -snf ../../${mdir}usr/share/${cmd} ${D}usr/share/${cmd}
+			${prefix}${cmd} $*
+			rc=$?
+			rm "${D}"usr/share/${cmd}
+			[ -d "${D}"usr/share/${cmd}-orig ] \
+				&& mv "${D}"usr/share/${cmd}{-orig,}
+			[ "$(find "${D}"usr/share/)" == "${D}usr/share/" ] \
+			rmdir "${D}usr/share"
+			;;
+		dir)
+			dodir "${@/#${slash}/${mdir}${slash}}"; rc=$?
+			;;
+		hard|sym)
+			${prefix}${cmd} "${mdir}$1" "${mdir}/$2"; rc=$?
+			;;
+		ins)
+			INSDESTTREE="${mdir}${INSTREE}" ${prefix}${cmd} $*; rc=$?
+			;;
+		*)
+			rc=0
+			;;
+	esac
+
+	[[ ${ran} -eq 0 ]] && die "mpi_do passed unknown command: ${cmd}"
+	return ${rc}
+}
+
+mpi_dobin()     { _mpi_do "dobin"        $*; }
+mpi_newbin()    { _mpi_do "newbin"       $*; }
+mpi_dodoc()     { _mpi_do "dodoc"        $*; }
+mpi_newdoc()    { _mpi_do "newdoc"       $*; }
+mpi_doexe()     { _mpi_do "doexe"        $*; }
+mpi_newexe()    { _mpi_do "newexe"       $*; }
+mpi_dohtml()    { _mpi_do "dohtml"       $*; }
+mpi_dolib()     { _mpi_do "dolib"        $*; }
+mpi_dolib.a()   { _mpi_do "dolib.a"      $*; }
+mpi_newlib.a()  { _mpi_do "newlib.a"     $*; }
+mpi_dolib.so()  { _mpi_do "dolib.so"     $*; }
+mpi_newlib.so() { _mpi_do "newlib.so"    $*; }
+mpi_dosbin()    { _mpi_do "dosbin"       $*; }
+mpi_newsbin()   { _mpi_do "newsbin"      $*; }
+mpi_doman()     { _mpi_do "doman"        $*; }
+mpi_newman()    { _mpi_do "newman"       $*; }
+mpi_doinfo()    { _mpi_do "doinfo"       $*; }
+mpi_dodir()     { _mpi_do "dodir"        $*; }
+mpi_dohard()    { _mpi_do "dohard"       $*; }
+mpi_doins()     { _mpi_do "doins"        $*; }
+mpi_dosym()     { _mpi_do "dosym"        $*; }
+
 # @FUNCTION: mpi_root
 # @DESCRIPTION:
-# Return installation root
-mpi_root()
+# Sets the root directory for the mpi pkg install
 {
 	echo "/usr/$(get_libdir)/mpi/${PF}"	
 }
@@ -149,6 +256,10 @@ mpi_foreach_implementation()
 
 	echo "${status}"
 }
+
+
+
+
 
 # @ECLASS-FUNCTION: mpi_wrapper
 # @DESCRIPTION:
