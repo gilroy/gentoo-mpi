@@ -91,7 +91,7 @@ mpi_pkg_compiler
 # Return installation root
 mpi_root()
 {
-	echo "/usr/$(get_libdir)/mpi/${PN}"	
+	echo "/usr/$(get_libdir)/mpi/${PF}"	
 }
 
 # @ECLASS-FUNCTION: mpi-select_detect_installs
