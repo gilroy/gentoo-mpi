@@ -171,6 +171,37 @@ mpi-select_get_implementation()
 	echo "${PN}"
 }
 
+# @FUCNTION: mpi_pkg_set_env
+# @DESCRIPTION:
+# Set environment variables specificly for mpi
+mpi_pkg_set_env()
+{
+	_mpi_oCC=${CC}
+	_mpi_oCXX=${CXX}
+	_mpi_oF77=${FF}
+	_mpi_oFC=${FC}
+	_mpi_oPCP=${PKG_CONFIG_PATH}
+	_mpi_oLLP=${LD_LIBRARY_PATH}
+	export CC=$(mpi_pkg_cc)
+	export CXX=$(mpi_pkg_cxx)
+	export F77=$(mpi_pkg_f77)
+	export FC=$(mpi_pkg_fc)
+	export PKG_CONFIG_PATH="$(mpi_root)$(get_libdir)/pkgconfig:${PKG_CONFIG_PATH}"
+	export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/mpich-3.2/install/usr/bin:${LD_LIBRARY_PATH}"
+}
+
+# @FUCNTION: mpi_pkg_restore_env
+# @DESCRIPTION:
+# Set envrionment variables to what they were before mpi_pkg_set_env
+mpi_pkg_set_env()
+{
+	export CC=${_mpi_oCC}
+	export CXX=$_mpi_oCXX
+	export F77=$_mpi_oF77
+	export FC=$_mpi_oFC
+	export PKG_CONFIG_PATH=${_mpi_oPCP}
+}
+
 # @ECLASS-FUNCTION: mpi-select_bindir
 # @DESCRIPTION:
 # Helper function for getting the directory for binaries to be installed to
