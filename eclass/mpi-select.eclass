@@ -47,9 +47,9 @@ mpi_dependencies()
 	local impl ret
 
 	for impl in "${MPI_TARGETS}"; do
-		if has_version ">=sys-cluster/${impl}"; then
+#		if has_version ">=sys-cluster/${impl}"; then
 			ret="${ret} >=sys-cluster/${impl}"	
-		fi
+#		fi
 	done
 
 	echo "${ret}"
@@ -96,11 +96,6 @@ _mpi_do()
 	local ran=1
 	local slash=/
 	local mdir="$(mpi_root)"
-
-	if ! mpi_classed; then
-		$*
-		return ${?}
-	fi
 
 	shift
 
@@ -197,6 +192,7 @@ mpi_dosym()     { _mpi_do "dosym"        $*; }
 # @FUNCTION: mpi_root
 # @DESCRIPTION:
 # Sets the root directory for the mpi pkg install
+mpi_root
 {
 	echo "/usr/$(get_libdir)/mpi/${PF}"	
 }
