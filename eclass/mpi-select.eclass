@@ -47,7 +47,9 @@ mpi_dependencies()
 	local impl ret
 
 	for impl in "${MPI_TARGETS}"; do
-		ret="${ret} >=sys-cluster/${impl}"	
+		if has_version ">=sys-cluster/${impl}"; then
+			ret="${ret} >=sys-cluster/${impl}"	
+		fi
 	done
 
 	echo "${ret}"
@@ -191,14 +193,6 @@ mpi-select_libdir()
 mpi-select_etcdir()
 {
 	echo "${D}/etc/${PF}/"
-}
-
-validate_mpi_targets()
-{
-	for impl in $MPI_TARGETS; do
-		einfo "hit targets function!"
-		# compare against has_version
-	done
 }
 
 ###########################
