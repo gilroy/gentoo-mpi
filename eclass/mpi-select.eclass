@@ -47,9 +47,7 @@ mpi_dependencies()
 	local impl ret
 
 	for impl in "${MPI_TARGETS}"; do
-#		if has_version ">=sys-cluster/${impl}"; then
-			ret="${ret} >=sys-cluster/${impl}"	
-#		fi
+			ret="${ret} =sys-cluster/${impl}"	
 	done
 
 	echo "${ret}"
