@@ -39,7 +39,7 @@ src_prepare() {
 		-e "/^CCFLAGS\>/s|= .*|= \$(HPL_DEFS) ${CFLAGS}|" \
 		-e "/^LINKFLAGS\>/s|= .*|= ${LDFLAGS}|" \
 		Make.gentoo_hpl_fblas_x86 || die
-    mpi-select_src_prepare
+    #mpi-select_src_prepare
 	default
 }
 
@@ -47,7 +47,7 @@ src_compile() {
 	# do NOT use emake here
 	mpi_pkg_set_env
 	# parallel make failure bug #321539
-    mpi-select_src_compile
+    #mpi-select_src_compile
 	HOME=${WORKDIR} emake -j1 arch=gentoo_hpl_fblas_x86
 	mpi_pkg_restore_env
 }
@@ -62,7 +62,7 @@ src_install() {
 	fi
 	mpiroot=mpi_root
 	insinto "${mpiroot}usr/share/hpl"
-    mpi-select_src_install
+    #mpi-select_src_install
 	mpi_doins bin/gentoo_hpl_fblas_x86/HPL.dat
 }
 
