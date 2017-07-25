@@ -84,6 +84,14 @@ mpi_pkg_compiler
 	done
 }
 
+# @FUNCTION: mpi_root
+# @DESCRIPTION:
+# Sets the root directory for the mpi pkg install
+mpi_root
+{
+	echo "/usr/$(get_libdir)/mpi/${PF}"	
+}
+
 # @FUNCTION: _mpi_do
 # @DESCRIPTION:
 # mpi-sepecific build functions to be called from mpi pkg ebuilds
@@ -187,13 +195,6 @@ mpi_dohard()    { _mpi_do "dohard"       $*; }
 mpi_doins()     { _mpi_do "doins"        $*; }
 mpi_dosym()     { _mpi_do "dosym"        $*; }
 
-# @FUNCTION: mpi_root
-# @DESCRIPTION:
-# Sets the root directory for the mpi pkg install
-mpi_root
-{
-	echo "/usr/$(get_libdir)/mpi/${PF}"	
-}
 
 # @ECLASS-FUNCTION: mpi-select_detect_installs
 # @DESCRIPTION:
@@ -276,10 +277,10 @@ mpi-select_get_implementation()
 	echo "${PN}"
 }
 
-# @FUCNTION: mpi_pkg_set_env
+# @FUCNTION: mpi-select_mpi_pkg_set_env
 # @DESCRIPTION:
 # Set environment variables specificly for mpi
-mpi_pkg_set_env()
+mpi-select_mpi_pkg_set_env()
 {
 	_mpi_oCC=${CC}
 	_mpi_oCXX=${CXX}
@@ -295,10 +296,10 @@ mpi_pkg_set_env()
 	export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/mpich-3.2/install/usr/bin:${LD_LIBRARY_PATH}"
 }
 
-# @FUCNTION: mpi_pkg_restore_env
+# @FUCNTION: mpi-select_mpi_pkg_restore_env
 # @DESCRIPTION:
 # Set envrionment variables to what they were before mpi_pkg_set_env
-mpi_pkg_set_env()
+mpi-select_mpi_pkg_set_env()
 {
 	export CC=${_mpi_oCC}
 	export CXX=$_mpi_oCXX

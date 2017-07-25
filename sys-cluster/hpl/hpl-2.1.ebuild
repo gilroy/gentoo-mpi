@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit eutils multilib mpi-select
+inherit eutils mpi-select multilib
 
 DESCRIPTION="High-Performance Linpack Benchmark for Distributed-Memory Computers"
 HOMEPAGE="http://www.netlib.org/benchmark/hpl/"
@@ -60,13 +60,14 @@ src_install() {
 	if use doc; then
 		mpi_dohtml -r www/*
 	fi
-	insinto $(mpi_root)usr/share/hpl
+	mpiroot=mpi_root
+	insinto "${mpiroot}usr/share/hpl"
     mpi-select_src_install
 	mpi_doins bin/gentoo_hpl_fblas_x86/HPL.dat
 }
 
 pkg_postinst() {
-	local d=$(mpi_root)
+	local d=mpi_root
 	einfo "Remember to copy $(mpi_root)usr/share/hpl/HPL.dat to your working directory"
 	einfo "before running xhpl. Typically one may run hpl by executing:"
 	einfo "\"mpiexec -np 4 /usr/bin/xhpl\""
