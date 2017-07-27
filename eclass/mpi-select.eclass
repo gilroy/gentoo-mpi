@@ -401,7 +401,7 @@ mpi-select_src_configure()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi-select_src_configure
+	mpi_foreach_implementation mpi-select_src_configure
 }
 
 mpi-select_src_compile()
@@ -427,7 +427,7 @@ mpi-select_src_compile()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi-select_src_compile
+	mpi_foreach_implementation mpi-select_src_compile
 }
 
 mpi-select_src_test()
@@ -447,7 +447,7 @@ mpi-select_src_test()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi-select_src_test
+	mpi_foreach_implementation mpi-select_src_test
 }
 
 mpi-select_src_install()
@@ -482,7 +482,7 @@ mpi-select_src_install()
 		popd > /dev/null || die
 	}
 
-	multilib_foreach_variant mpi-select_src_install
+	mpi_foreach_implementation mpi-select_src_install
 
 	
 	# TODO: proper conditional for einstalldocs
