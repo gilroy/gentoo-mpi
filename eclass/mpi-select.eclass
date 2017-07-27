@@ -92,6 +92,46 @@ mpi_root
 	echo "/usr/$(get_libdir)/mpi/${PF}"	
 }
 
+# @FUNCTION: mpi_foreach_implementation
+# @DESCRIPTION:
+# Iterates through each implementation and executes src_* commands
+mpi_foreach_implementation()
+{
+	debug-print-function ${FUNCNAME} "${@}"
+
+	# [[ -z "${INSTALLED_IMPLEMENTATIONS}" ]] \
+	#			die "No mpi implementations detected"
+
+	local status=0
+
+	for implementation in "${MPI_TARGETS}"
+	do
+		# iterate through implementations, repeat same commands for each variant
+		if [[ "${IMPLEMENTATION_LIST}" ~= *"${implementation}"* ]]
+			local BUILD_DIR="${WORKDIR}/build"
+
+			# modeling after multibuild for testing & learning
+			_mpi_run()
+			{
+				local i=1
+				while [[ ${!1} == _* ]];do
+					i+=1
+				done
+
+				[[ ${i} -le ${#} ]]
+				einfo ${@}
+				echo ${@}
+			}
+		else
+			die "invalid implementation!"
+		fi
+
+
+	done
+
+	echo "${status}"
+}
+
 # @FUNCTION: _mpi_do
 # @DESCRIPTION:
 # mpi-sepecific build functions to be called from mpi pkg ebuilds
