@@ -260,36 +260,36 @@ mpi_foreach_implementation()
 	#			die "No mpi implementations detected"
 
 	local status=0
-
-	for implementation in "${@}"
-	do
-		# iterate through implementations, repeat same commands for each variant
-		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
-			local BUILD_DIR="${WORKDIR}/build"
-			einfo ${BUILD_DIR}
-			
-			# modeling after multibuild for testing & learning
-			_mpi_run()
-			{
-				local i=1
-				while [[ ${!1} == _* ]];do
-					i+=1
-				done
-
-				[[ ${i} -le ${#} ]]
-				einfo ${@}
-				echo ${@}
-			}
-
-			_mpi_run "${@}"
-		else
-			die "invalid implementation!"
-		fi
-
-	
-	done
-
-	echo "${status}"
+    for arg in "${@}"; do
+    	for implementation in "${MPI_TARGETS}"
+    	do
+    		# iterate through implementations, repeat same commands for each variant
+    		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
+    			local BUILD_DIR="${WORKDIR}/build"
+    			einfo ${BUILD_DIR}
+    			
+    			# modeling after multibuild for testing & learning
+    			_mpi_run()
+    			{
+    				local i=1
+    				while [[ ${!1} == _* ]];do
+    					i+=1
+    				done
+    
+    				[[ ${i} -le ${#} ]]
+    				einfo ${@}
+    				${@}
+    			}
+    
+    			_mpi_run "${@}"
+    		else
+    			die "invalid implementation!"
+    		fi
+    
+    	
+    	done
+    done 
+    echo "${status}"
 }
 
 
