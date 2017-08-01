@@ -490,6 +490,7 @@ mpi-select_src_install()
         einstalldocs
     fi
 }
+
 mpi-select_src_install_all()
 {
     einfo "hit install_all!"
