@@ -8,7 +8,7 @@
 
 inherit multilib multilib-minimal flag-o-matic
 
-EXPORT_FUNCTIONS src_configure src_compile src_test src_install
+EXPORT_FUNCTIONS src_configure src_compile src_test src_install src_install_all
 
 case ${EAPI:-0} in
   6) ;;
@@ -484,7 +484,13 @@ mpi-select_src_install()
 
 	mpi_foreach_implementation mpi-select_src_install
 
-	
-	# TODO: proper conditional for einstalldocs
-	einstalldocs
+    if declare -f mpi-select_src_install_all > /dev/null; then    
+	    mpi-select_src_install_all
+    else
+        einstalldocs
+    fi
+}
+mpi-select_src_install_all()
+{
+    einfo "hit install_all!"
 }
