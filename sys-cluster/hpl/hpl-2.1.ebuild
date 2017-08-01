@@ -67,7 +67,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	local d=mpi_root
+	local d=$(mpi_root)
 	einfo "Remember to copy $(mpi_root)usr/share/hpl/HPL.dat to your working directory"
 	einfo "before running xhpl. Typically one may run hpl by executing:"
 	einfo "\"mpiexec -np 4 /usr/bin/xhpl\""
