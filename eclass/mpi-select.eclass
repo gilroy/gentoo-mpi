@@ -40,27 +40,6 @@ MPI_DIR="/usr/$(get_libdir)/mpi"
 # List of implementations in make.conf.
 MPI_TARGETS="${MPI_TARGETS}"
 
-# @FUNCTION: mpi_dependencies
-# Grabs $MPI_TARGETS to add to RDEPEND
-mpi_dependencies()
-{
-	local impl ret
-
-	for impl in "${MPI_TARGETS}"; do
-			ret="${ret} =sys-cluster/${impl}"	
-	done
-
-	echo "${ret}"
-}
-
-# @FUNCTION: get_mpicc
-# @DESCRIPTION:
-# Fetches most recent version of mpicc installed
-get_mpicc()
-{
-	echo "$(ls -dv /usr/$(get_libdir)/mpi/mpich-* | tail -n 1)" || die "could not get mpicc"
-}
-
 # @FUNCTION : mpi_pkg_cc
 # @DESCRIPTION :
 # Get location of C compiler from /usr/
@@ -83,6 +62,28 @@ mpi_pkg_compiler
 		fi
 	done
 }
+
+# @FUNCTION: mpi_dependencies
+# Grabs $MPI_TARGETS to add to RDEPEND
+mpi_dependencies()
+{
+	local impl ret
+
+	for impl in "${MPI_TARGETS}"; do
+			ret="${ret} =sys-cluster/${impl}"	
+	done
+
+	echo "${ret}"
+}
+
+# @FUNCTION: get_mpicc
+# @DESCRIPTION:
+# Fetches most recent version of mpicc installed
+get_mpicc()
+{
+	echo "$(ls -dv /usr/$(get_libdir)/mpi/mpich-* | tail -n 1)" || die "could not get mpicc"
+}
+
 
 # @FUNCTION: mpi_root
 # @DESCRIPTION:
