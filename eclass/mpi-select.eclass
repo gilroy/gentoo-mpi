@@ -6,6 +6,8 @@
 # Michael Gilroy <michael.gilroy24@gmail.com>
 # @BLURB: Allow mpi software to select mpi implementation of choice.
 
+inherit multilib multilib-minimal flag-o-matic
+
 EXPORT_FUNCTIONS src_configure src_compile src_test src_install src_install_all
 
 case ${EAPI:-0} in
