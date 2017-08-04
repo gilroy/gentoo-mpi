@@ -22,6 +22,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
+    mpi-select_src_prepare
 	local mpicc_path="$(get_mpicc)"
 
 	cp setup/Make.Linux_PII_FBLAS Make.gentoo_hpl_fblas_x86 || die
@@ -43,11 +44,13 @@ src_compile() {
 	# do NOT use emake here
 	mpi_pkg_set_env
 	# parallel make failure bug #321539
+    mpi-select_src_compile
 	HOME=${WORKDIR} emake -j1 arch=gentoo_hpl_fblas_x86
 	mpi_pkg_restore_env
 }
 
 src_install() {
+    mpi-select_src_install
 	mpi_dobin bin/gentoo_hpl_fblas_x86/xhpl
 	mpi_dolib.a lib/gentoo_hpl_fblas_x86/libhpl.a
 	mpi_dodoc INSTALL BUGS COPYRIGHT HISTORY README TUNING \
