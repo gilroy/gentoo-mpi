@@ -67,10 +67,15 @@ mpi_pkg_compiler
 # Grabs $MPI_TARGETS to add to RDEPEND
 mpi_dependencies()
 {
-	local impl ret
+	local impl
+    local ret=""
 
 	for impl in "${MPI_TARGETS}"; do
-			ret="${ret} =sys-cluster/${impl}"	
+        if [[ -z "${ret// }" ]]; then
+            ret="=sys-cluster/${impl}"
+        else
+		    ret="${ret} =sys-cluster/${impl}"	
+        fi
 	done
 
 	echo "${ret}"
@@ -81,6 +86,7 @@ mpi_dependencies()
 # Fetches most recent version of mpicc installed
 get_mpicc()
 {
+    # TODO: break this up, or modularize like the mpi_pkg_** functions
 	echo "$(ls -dv /usr/$(get_libdir)/mpi/mpich-* | tail -n 1)" || die "could not get mpicc"
 }
 
