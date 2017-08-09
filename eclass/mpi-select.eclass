@@ -78,6 +78,10 @@ mpi_dependencies()
         fi
 	done
 
+    for pn in "${IMPLEMENTATIONS_LIST}"; do
+        ret="{ret} !sys-cluster/{pn}"
+    done
+
 	echo "${ret}"
 }
 
