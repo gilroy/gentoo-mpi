@@ -478,7 +478,7 @@ mpi-select_src_install()
 		if declare -f multilib_src_test > /dev/null ; then
 			multilib_src_install
 		else
-			default_src_test
+			default_src_install
 		fi
 		
 		popd > /dev/null || die
@@ -502,7 +502,7 @@ mpi-select_src_install_all()
 		if declare -f multilib_src_test > /dev/null ; then
 			multilib_src_install_all
 		else
-			default_src_test
+			default_src_install_all
 		fi
 		
 		popd > /dev/null || die
