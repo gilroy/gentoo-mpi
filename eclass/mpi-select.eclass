@@ -495,5 +495,18 @@ mpi-select_src_install()
 
 mpi-select_src_install_all()
 {
-    einfo "hit install_all!"
+	mpi_src_install_all()
+	{
+		mkdir -p "${BUILD_DIR}" || die
+		pushd "${BUILD_DIR}" > /dev/null || die
+		if declare -f multilib_src_test > /dev/null ; then
+			multilib_src_install_all
+		else
+			default_src_test
+		fi
+		
+		popd > /dev/null || die
+	}
+
+    mpi_foreach_implementation mpi_src_install_all
 }
