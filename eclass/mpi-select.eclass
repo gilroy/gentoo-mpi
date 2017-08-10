@@ -390,7 +390,7 @@ mpi-select_src_configure()
 		einfo "hit openmpi"
 	fi
 
-	mpi-select_src_configure()
+	mpi_src_configure()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -403,7 +403,7 @@ mpi-select_src_configure()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_src_configure
+	mpi_foreach_implementation mpi_src_configure
 }
 
 mpi-select_src_compile()
@@ -416,7 +416,7 @@ mpi-select_src_compile()
 		einfo "hit openmpi"
 	fi
 
-	mpi-select_src_compile()
+	mpi_src_compile()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -429,14 +429,14 @@ mpi-select_src_compile()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_src_compile
+	mpi_foreach_implementation mpi_src_compile
 }
 
 mpi-select_src_test()
 {
 	emake -j1 check
 
-	mpi-select_src_test()
+	mpi_src_test()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -449,7 +449,7 @@ mpi-select_src_test()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_src_test
+	mpi_foreach_implementation mpi_src_test
 }
 
 mpi-select_src_install()
@@ -471,7 +471,7 @@ mpi-select_src_install()
 
 	find . -type d -empty -delete || die "could not delete empty directories"
 
-	mpi-select_src_install()
+	mpi_src_install()
 	{
 		mkdir -p "${BUILD_DIR}" || die
 		pushd "${BUILD_DIR}" > /dev/null || die
@@ -484,7 +484,7 @@ mpi-select_src_install()
 		popd > /dev/null || die
 	}
 
-	mpi_foreach_implementation mpi-select_src_install
+	mpi_foreach_implementation mpi_src_install
 
     if declare -f mpi-select_src_install_all > /dev/null; then    
 	    mpi-select_src_install_all
