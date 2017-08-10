@@ -23,7 +23,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
     mpi-select_src_prepare
-	local mpicc_path="$(get_mpicc)"
+	local mpicc_path="$(mpi_pkg_cc)"
 
 	cp setup/Make.Linux_PII_FBLAS Make.gentoo_hpl_fblas_x86 || die
 	sed -i \
