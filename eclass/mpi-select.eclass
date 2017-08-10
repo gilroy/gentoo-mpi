@@ -57,7 +57,7 @@ mpi_pkg_compiler
 	for args in "${1}"; do
 		if [ -f "/usr/lib64/mpi/mpich-3.2/install/usr/bin" ]; then
 			die "hit!!"
-			echo "$(get_mpicc)/install/usr/bin/mpi${args}"
+            echo "/usr/$(get_libdir)/mpi/${2}/install/usr/bin/mpi${args}"
 			break
 		fi
 	done
@@ -83,15 +83,6 @@ mpi_dependencies()
     done
 
 	echo "${ret}"
-}
-
-# @FUNCTION: get_mpicc
-# @DESCRIPTION:
-# Fetches most recent version of mpicc installed
-get_mpicc()
-{
-    # TODO: break this up, or modularize like the mpi_pkg_** functions
-	echo "$(ls -dv /usr/$(get_libdir)/mpi/mpich-* | tail -n 1)" || die "could not get mpicc"
 }
 
 
