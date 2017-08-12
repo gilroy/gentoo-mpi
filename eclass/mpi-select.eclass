@@ -311,6 +311,14 @@ mpi_wrapper()
 
 }
 
+# @ECLASS-FUNCTION: _set_ld_library_path
+# @DESCRIPTION:
+# Set LD_LIBRARY_PATH based on current implementation
+_set_ld_library_path()
+{
+	export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/${1}/install/usr/bin:${LD_LIBRARY_PATH}"
+}
+
 # @ECLASS-FUNCTION: mpi-select_get_implementation
 # @DESCRIPTION:
 # Helper function for getting the current implementation in use
