@@ -112,6 +112,8 @@ mpi_foreach_implementation()
 		if [[ "${IMPLEMENTATION_LIST}" ~= *"${implementation}"* ]]
 			local BUILD_DIR="${WORKDIR}/build"
 
+            _set_ld_library_path ${implementation}
+
 			# modeling after multibuild for testing & learning
 			_mpi_run()
 			{
