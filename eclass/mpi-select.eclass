@@ -42,10 +42,34 @@ MPI_TARGETS="${MPI_TARGETS}"
 
 # @FUNCTION : mpi_pkg_cc
 # @DESCRIPTION :
-# Get location of C compiler from /usr/
+# Get the full path of the C compiler
 mpi_pkg_cc()
 {
 	mpi_pkg_compiler "cc"
+}
+
+# @FUNCTION : mpi_pkg_cxx
+# @DESCRIPTION :
+# Get the full path of the C++ compiler
+mpi_pkg_cxx()
+{
+	mpi_pkg_compiler "cxx c++"
+}
+
+# @FUNCTION : mpi_pkg_fc
+# @DESCRIPTION :
+# Get the full path of the f90 compiler
+mpi_pkg_fc()
+{
+	mpi_pkg_compiler "f90 fc"
+}
+
+# @FUNCTION : mpi_pkg_fc
+# @DESCRIPTION :
+# Get the full path of the f77 compiler
+mpi_pkg_f77()
+{
+	mpi_pkg_compiler "f77"
 }
 
 # @FUNCTION: mpi_pkg_compiler
