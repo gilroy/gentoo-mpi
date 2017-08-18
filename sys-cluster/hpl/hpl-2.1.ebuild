@@ -44,7 +44,7 @@ src_prepare() {
 }
 
 src_compile() {
-	 do NOT use emake here
+	#  do NOT use emake here
 	mpi_pkg_set_env
 	# parallel make failure bug #321539
     mpi-select_src_compile

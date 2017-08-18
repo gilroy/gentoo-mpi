@@ -92,7 +92,7 @@ mpi_pkg_compiler
 mpi_dependencies()
 {
 	local impl
-    local ret=""
+    RET=""
 
 	for impl in "${MPI_TARGETS}"; do
         if [[ -z "${ret// }" ]]; then
@@ -106,7 +106,7 @@ mpi_dependencies()
         ret="{ret} !sys-cluster/{pn}"
     done
 
-	echo "${ret}"
+	echo ${RET}
 }
 
 
@@ -133,10 +133,11 @@ mpi_foreach_implementation()
 	for implementation in "${MPI_TARGETS}"
 	do
 		# iterate through implementations, repeat same commands for each variant
-		if [[ "${IMPLEMENTATION_LIST}" ~= *"${implementation}"* ]]
+		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
 			local BUILD_DIR="${WORKDIR}/build"
 
-            _set_ld_library_path ${implementation}
+			export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/${implementation}/usr/$(get_libdir)/libmpi.so"
+            #_set_ld_library_path ${implementation}
 
 			# modeling after multibuild for testing & learning
 			_mpi_run()
