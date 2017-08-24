@@ -21,10 +21,8 @@ inherit path-manipulation config
 # List the valid mpi classes currently installed.
 find_classes() {
 	local classes
-	for f in ${ROOT}/etc/env.d/mpi/*; do
-		[[ -f ${f} ]] || continue
-		f=$(basename ${f})
-		[[ "${f#mpi-}" == "${f}" ]] && continue
+	for f in ${MPI_TARGETS}; do
+		[[ -d ${ROOT}/usr/lib64/mpi/${f} ]] || continue
 		classes=(${classes[@]} ${f})
 	done
 	echo ${classes[@]}
