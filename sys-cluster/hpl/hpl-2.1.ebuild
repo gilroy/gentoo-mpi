@@ -22,10 +22,10 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
-	local mpicc_path="$(mpi_pkg_cc)"
-	local a=""
+	local mpicc_path="/usr/lib64/mpi/mpich-3.2/install/usr/bin/mpicc/"
 	local locallib="${EPREFIX}/usr/$(get_libdir)/lib"
 
+    mpi-select_src_prepare
 	cp setup/Make.Linux_PII_FBLAS Make.gentoo_hpl_fblas_x86 || die
 	sed -i \
 		-e "/^TOPdir/s,= .*,= ${S}," \
@@ -39,7 +39,6 @@ src_prepare() {
 		-e "/^CCFLAGS\>/s|= .*|= \$(HPL_DEFS) ${CFLAGS}|" \
 		-e "/^LINKFLAGS\>/s|= .*|= ${LDFLAGS}|" \
 		Make.gentoo_hpl_fblas_x86 || die
-    mpi-select_src_prepare
 	default
 }
 
@@ -47,7 +46,7 @@ src_compile() {
 	#  do NOT use emake here
 	mpi_pkg_set_env
 	# parallel make failure bug #321539
-    mpi-select_src_compile
+    #mpi-select_src_compile
 	HOME=${WORKDIR} emake -j1 arch=gentoo_hpl_fblas_x86
 	mpi_pkg_restore_env
 }

@@ -250,12 +250,12 @@ mpi_foreach_implementation()
     	for implementation in "${MPI_TARGETS}"
     	do
     		# iterate through implementations, repeat same commands for each variant
-    		#if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
+    		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation%-*}"* ]]; then
     			local BUILD_DIR="${WORKDIR}/build"
     			einfo ${BUILD_DIR}
 				export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/${implementation}/usr/$(get_libdir)/libmpi.so"
     			
-    			# modeling after multibuild for testing & learning
+    			modeling after multibuild for testing & learning
     			_mpi_run()
     			{
     				local i=1
@@ -269,9 +269,9 @@ mpi_foreach_implementation()
     			}
     
     			_mpi_run "${@}"
-    		#else
-    		#	die "invalid implementation!"
-    		#fi
+    		else
+    			die "invalid implementation!"
+    		fi
     
     	
     	done
