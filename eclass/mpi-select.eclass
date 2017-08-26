@@ -253,9 +253,9 @@ mpi_foreach_implementation()
     		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation%-*}"* ]]; then
     			local BUILD_DIR="${WORKDIR}/build"
     			einfo ${BUILD_DIR}
-				export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/${implementation}/usr/$(get_libdir)/libmpi.so"
+				export LDFLAGS="${LDFLAGS}:/usr/$(get_libdir)/mpi/${implementation}/usr/$(get_libdir)"
     			
-    			modeling after multibuild for testing & learning
+    			# modeling after multibuild for testing & learning
     			_mpi_run()
     			{
     				local i=1

@@ -22,9 +22,11 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
 src_prepare() {
-	local mpicc_path="/usr/lib64/mpi/mpich-3.2/install/usr/bin/mpicc/"
-	local locallib="${EPREFIX}/usr/$(get_libdir)/lib"
+	local mpicc_path="/usr/lib64/mpi/mpich-3.2/install/usr/bin/mpicc"
+	local locallib="${EPREFIX}/usr/$(get_libdir)/"
 
+	#export LD_LIBRARY_PATH="/usr/lib64/mpi/mpich-3.2/install/usr/lib64/"
+	export LDFLAGS="${LDFLAGS} -L/usr/lib64/mpi/mpich-3.2/install/usr/lib64/"
     mpi-select_src_prepare
 	cp setup/Make.Linux_PII_FBLAS Make.gentoo_hpl_fblas_x86 || die
 	sed -i \
@@ -33,6 +35,7 @@ src_prepare() {
 		-e '/^ARCH\>/s,= .*,= gentoo_hpl_fblas_x86,' \
 		-e '/^MPdir\>/s,= .*,=,' \
 		-e '/^MPlib\>/s,= .*,=,' \
+		-e '/^MPinc\>/s,= .*,= -I/usr/lib64/mpi/mpich-3.2/install/usr/include,' \
 		-e "/^LAlib\>/s%= .*%= $($(tc-getPKG_CONFIG) --libs blas lapack)%" \
 		-e "/^LINKER\>/s,= .*,= ${mpicc_path}," \
 		-e "/^CC\>/s,= .*,= ${mpicc_path}," \
@@ -44,6 +47,7 @@ src_prepare() {
 
 src_compile() {
 	#  do NOT use emake here
+	export LDFLAGS="-L/usr/lib64/mpi/mpich-3.2/install/usr/lib64/"
 	mpi_pkg_set_env
 	# parallel make failure bug #321539
     #mpi-select_src_compile
