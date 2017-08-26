@@ -118,49 +118,6 @@ mpi_root
 	echo "/usr/$(get_libdir)/mpi/${PF}"	
 }
 
-# @FUNCTION: mpi_foreach_implementation
-# @DESCRIPTION:
-# Iterates through each implementation and executes src_* commands
-mpi_foreach_implementation()
-{
-	debug-print-function ${FUNCNAME} "${@}"
-
-	# [[ -z "${INSTALLED_IMPLEMENTATIONS}" ]] \
-	#			die "No mpi implementations detected"
-
-	local status=0
-
-	for implementation in "${MPI_TARGETS}"
-	do
-		# iterate through implementations, repeat same commands for each variant
-		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
-			local BUILD_DIR="${WORKDIR}/build"
-
-			export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/${implementation}/usr/$(get_libdir)/libmpi.so"
-            #_set_ld_library_path ${implementation}
-
-			# modeling after multibuild for testing & learning
-			_mpi_run()
-			{
-				local i=1
-				while [[ ${!1} == _* ]];do
-					i+=1
-				done
-
-				[[ ${i} -le ${#} ]]
-				einfo ${@}
-				echo ${@}
-			}
-		else
-			die "invalid implementation!"
-		fi
-
-
-	done
-
-	echo "${status}"
-}
-
 # @FUNCTION: _mpi_do
 # @DESCRIPTION:
 # mpi-sepecific build functions to be called from mpi pkg ebuilds
@@ -293,9 +250,10 @@ mpi_foreach_implementation()
     	for implementation in "${MPI_TARGETS}"
     	do
     		# iterate through implementations, repeat same commands for each variant
-    		if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
+    		#if [[ "${IMPLEMENTATION_LIST}" == *"${implementation}"* ]]; then
     			local BUILD_DIR="${WORKDIR}/build"
     			einfo ${BUILD_DIR}
+				export LD_LIBRARY_PATH="/usr/$(get_libdir)/mpi/${implementation}/usr/$(get_libdir)/libmpi.so"
     			
     			# modeling after multibuild for testing & learning
     			_mpi_run()
@@ -311,9 +269,9 @@ mpi_foreach_implementation()
     			}
     
     			_mpi_run "${@}"
-    		else
-    			die "invalid implementation!"
-    		fi
+    		#else
+    		#	die "invalid implementation!"
+    		#fi
     
     	
     	done
